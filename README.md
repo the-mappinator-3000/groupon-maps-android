@@ -14,9 +14,9 @@ Show maps of all Groupon meeting rooms. You can see the schedules for them and y
 
 ## Requirements
 App Must:
-* [ ] have a repo on github
-* [ ] have user stories
-* [ ] have wireframes (see wireframing tools...)
+* [X] have a repo on github
+* [X] have user stories
+* [X] have wireframes (see wireframing tools...)
 * [ ] be functionally complete
 * [ ] Must have at least three separate "activities" or screens supporting user interaction
 * [ ] Must be data-driven with dynamic information or media being displayed
@@ -35,3 +35,5 @@ Expanded App:
 * [ ] Cameras
 * [ ] Take into account when participants are free (find the best time for everyone)
 
+Wireframes:
+![alt tag](wireframes/IMG_0102.JPG)

@@ -34,6 +34,7 @@ Expanded App:
 * [ ] Beacons
 * [ ] Cameras
 * [ ] Take into account when participants are free (find the best time for everyone)
+* [ ] Show what meeting is on so that it can be determined if the meeting can be cancelled
 
 Wireframes:
 ![alt tag](wireframes/IMG_0102.JPG)

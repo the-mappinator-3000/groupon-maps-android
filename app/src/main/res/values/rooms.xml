@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="floors">
+        <item>pa4_1</item>
+        <item>pa4_2</item>
+        <item>pa4_3</item>
+        <item>pa5_1</item>
+    </string-array>
+
+    <string-array name="pa4_1">
+        <item>pa4_1_running_with_scissors</item>
+        <item>pa4_1_irs_audit</item>
+        <item>pa4_1_lion_tipping</item>
+        <item>pa4_1_zombie_invasion</item>
+        <item>pa4_1_nuclear_winter</item>
+    </string-array>
+    <string name="pa4_1_running_with_scissors">groupon.com_2d39363835323336302d333035@resource.calendar.google.com</string>
+    <string name="pa4_1_irs_audit">groupon.com_33323633363931342d323338@resource.calendar.google.com</string>
+    <string name="pa4_1_lion_tipping">groupon.com_3932313735323337373730@resource.calendar.google.com</string>
+    <string name="pa4_1_zombie_invasion">groupon.com_333435353838322d3136@resource.calendar.google.com</string>
+    <string name="pa4_1_nuclear_winter">groupon.com_2d33333437353638362d383133@resource.calendar.google.com</string>
+
+    <string-array name="pa4_2">
+        <item>pa4_2_coupon_detat</item>
+        <item>pa4_2_shapes_and_colors</item>
+        <item>pa4_2_dealpig</item>
+    </string-array>
+    <string name="pa4_2_coupon_detat">groupon.com_37363532393933332d3337@resource.calendar.google.com</string>
+    <string name="pa4_2_shapes_and_colors">groupon.com_323830373232372d3932@resource.calendar.google.com</string>
+    <string name="pa4_2_dealpig">groupon.com_3333313631303338393532@resource.calendar.google.com</string>
+
+    <string-array name="pa4_3">
+        <item>pa4_3_abs_of_steel</item>
+        <item>pa4_3_boil_the_ocean</item>
+        <item>pa4_3_wicked_good</item>
+        <item>pa4_3_shamwow</item>
+        <item>pa4_3_antonios_nut_house</item>
+        <item>pa4_3_act_natural</item>
+        <item>pa4_3_chia_pet</item>
+        <item>pa4_3_legally_drunk</item>
+        <item>pa4_3_the_patio</item>
+        <item>pa4_3_lets_take_this_offline</item>
+    </string-array>
+    <string name="pa4_3_abs_of_steel">groupon.com_3237313233313637363833@resource.calendar.google.com</string>
+    <string name="pa4_3_boil_the_ocean">groupon.com_2d3535393438353631313631@resource.calendar.google.com</string>
+    <string name="pa4_3_wicked_good">groupon.com_2d38343633363937372d333031@resource.calendar.google.com</string>
+    <string name="pa4_3_shamwow">groupon.com_36363633363138363235@resource.calendar.google.com</string>
+    <string name="pa4_3_antonios_nut_house">groupon.com_39383233313130392d353234@resource.calendar.google.com</string>
+    <string name="pa4_3_act_natural">groupon.com_2d3131313835343039393838@resource.calendar.google.com</string>
+    <string name="pa4_3_chia_pet">groupon.com_2d393437313036342d3330@resource.calendar.google.com</string>
+    <string name="pa4_3_legally_drunk">groupon.com_33343639363130352d333736@resource.calendar.google.com</string>
+    <string name="pa4_3_the_patio">groupon.com_2d32373435323337302d343033@resource.calendar.google.com</string>
+    <string name="pa4_3_lets_take_this_offline">groupon.com_2d3333323935363437393536@resource.calendar.google.com</string>
+
+    <string-array name="pa5_1">
+        <item>pa5_1_mr_petersons_office</item>
+        <item>pa5_1_do_not_reply_all</item>
+        <item>pa5_1_no_loitering</item>
+        <item>pa5_1_15_items_or_less</item>
+        <item>pa5_1_no_flash_photography</item>
+        <item>pa5_1_you_break_you_buy</item>
+        <item>pa5_1_no_groupon_parking</item>
+        <item>pa5_1_pieces_of_flair</item>
+        <item>pa5_1_miltons_stapler</item>
+        <item>pa5_1_jump_to_conclusions</item>
+        <item>pa5_1_the_other_michael_bolton</item>
+    </string-array>
+    <string name="pa5_1_mr_petersons_office">groupon.com_2d38323931353834322d323630@resource.calendar.google.com</string>
+    <string name="pa5_1_do_not_reply_all">groupon.com_2d3932343837393238313735@resource.calendar.google.com</string>
+    <string name="pa5_1_no_loitering">groupon.com_37363531323931323532@resource.calendar.google.com</string>
+    <string name="pa5_1_15_items_or_less">groupon.com_2d33383133363032352d323835@resource.calendar.google.com</string>
+    <string name="pa5_1_no_flash_photography">groupon.com_2d3431353338363131333738@resource.calendar.google.com</string>
+    <string name="pa5_1_you_break_you_buy">groupon.com_2d3537353937313533323330@resource.calendar.google.com</string>
+    <string name="pa5_1_no_groupon_parking">groupon.com_2d3530323735353839383633@resource.calendar.google.com</string>
+    <string name="pa5_1_pieces_of_flair">groupon.com_35303137343835323531@resource.calendar.google.com</string>
+    <string name="pa5_1_miltons_stapler">groupon.com_363036343934362d333631@resource.calendar.google.com</string>
+    <string name="pa5_1_jump_to_conclusions">groupon.com_2d3938333130323730323133@resource.calendar.google.com</string>
+    <string name="pa5_1_the_other_michael_bolton">groupon.com_2d39353138303134352d323239@resource.calendar.google.com</string>
+</resources>

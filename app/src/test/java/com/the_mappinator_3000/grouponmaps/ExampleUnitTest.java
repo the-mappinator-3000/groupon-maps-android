@@ -1,4 +1,4 @@
-package com.the_mappinator_3000.grouponmaps;
+package com.themappinator.grouponmaps;
 
 import org.junit.Test;
 

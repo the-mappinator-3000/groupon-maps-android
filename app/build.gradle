@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.the_mappinator_3000.grouponmaps"
+        applicationId "com.themappinator.grouponmaps"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

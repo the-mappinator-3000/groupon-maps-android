@@ -1,4 +1,4 @@
-package com.themappinator.grouponmaps;
+package com.themappinator.grouponcalandar;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

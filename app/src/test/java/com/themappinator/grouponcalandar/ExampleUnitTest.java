@@ -1,4 +1,4 @@
-package com.themappinator.grouponmaps;
+package com.themappinator.grouponcalandar;
 
 import org.junit.Test;
 

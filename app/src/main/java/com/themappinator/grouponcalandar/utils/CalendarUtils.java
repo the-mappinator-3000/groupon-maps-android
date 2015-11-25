@@ -1,4 +1,4 @@
-package com.themappinator.grouponcalandar;
+package com.themappinator.grouponcalandar.utils;
 
 import android.content.Context;
 

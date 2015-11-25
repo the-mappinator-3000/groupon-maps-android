@@ -1,7 +1,6 @@
-package com.themappinator.grouponcalandar;
+package com.themappinator.grouponcalandar.activities;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.ViewGroup;
@@ -19,38 +19,32 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
+import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RoomsListActivity extends Activity {
-    GoogleAccountCredential mCredential;
+public class RoomsListActivity extends AppCompatActivity {
+
     private TextView mOutputText;
     ProgressDialog mProgress;
-
+    GoogleCalendarApiClient client;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
     private String[] floors;
     private Map<String, String> prettyNameByGoogleResourceId;
 
@@ -90,10 +84,8 @@ public class RoomsListActivity extends Activity {
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff())
-                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
+        client = new GoogleCalendarApiClient(getApplicationContext(),
+                settings.getString(PREF_ACCOUNT_NAME, null));
     }
 
 
@@ -138,7 +130,7 @@ public class RoomsListActivity extends Activity {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
-                        mCredential.setSelectedAccountName(accountName);
+                        client.setSelectedAccountName(accountName);
                         SharedPreferences settings =
                                 getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
@@ -165,11 +157,11 @@ public class RoomsListActivity extends Activity {
      * user can pick an account.
      */
     private void refreshResults() {
-        if (mCredential.getSelectedAccountName() == null) {
+        if (!client.isAccountSelected()) {
             chooseAccount();
         } else {
             if (isDeviceOnline()) {
-                new MakeRequestTask(mCredential).execute(floors[0]);
+                new MakeRequestTask(client).execute(floors[0]);
             } else {
                 mOutputText.setText("No network connection available.");
             }
@@ -182,7 +174,7 @@ public class RoomsListActivity extends Activity {
      */
     private void chooseAccount() {
         startActivityForResult(
-                mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+                client.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
     /**
@@ -238,13 +230,8 @@ public class RoomsListActivity extends Activity {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
 
-        public MakeRequestTask(GoogleAccountCredential credential) {
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.calendar.Calendar.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("Google Calendar API Android Quickstart")
-                    .build();
+        public MakeRequestTask(GoogleCalendarApiClient client) {
+            mService = client.getCalendarService();
         }
 
         /**

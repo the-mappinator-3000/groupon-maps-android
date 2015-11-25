@@ -21,17 +21,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.FreeBusyCalendar;
-import com.google.api.services.calendar.model.FreeBusyRequest;
-import com.google.api.services.calendar.model.FreeBusyRequestItem;
-import com.google.api.services.calendar.model.FreeBusyResponse;
 import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,11 +156,26 @@ public class RoomsListActivity extends AppCompatActivity {
             chooseAccount();
         } else {
             if (isDeviceOnline()) {
-                new MakeRequestTask(client).execute(floors[0]);
+                getResults(floors[0]);
             } else {
                 mOutputText.setText("No network connection available.");
             }
         }
+    }
+
+    private void getResults(String floor) {
+        String[] roomsNames = getResources().getStringArray(getResources().getIdentifier(floor,"array", getApplicationInfo().packageName));
+        Room[] rooms = new Room[roomsNames.length];
+        for (int i = 0; i < roomsNames.length; i++) {
+            String googleResource = CalendarUtils.getResourceString(roomsNames[i], RoomsListActivity.this);
+            prettyNameByGoogleResourceId.put(googleResource, roomsNames[i]);
+            Room room = new Room();
+            room.floor = floor;
+            room.readableName = roomsNames[i];
+            room.googleResourceId = googleResource;
+            rooms[i] = room;
+        }
+        new MakeRequestTask(client).execute(rooms);
     }
 
     /**
@@ -226,64 +236,27 @@ public class RoomsListActivity extends AppCompatActivity {
      * An asynchronous task that handles the Google Calendar API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<String, Void, List<String>> {
-        private com.google.api.services.calendar.Calendar mService = null;
+    private class MakeRequestTask extends AsyncTask<Room, Void, List<Room>> {
+        GoogleCalendarApiClient client;
         private Exception mLastError = null;
 
         public MakeRequestTask(GoogleCalendarApiClient client) {
-            mService = client.getCalendarService();
+            this.client = client;
         }
 
         /**
          * Background task to call Google Calendar API.
-         * @param params no parameters needed for this task.
          */
         @Override
-        protected List<String> doInBackground(String... params) {
+        protected List<Room> doInBackground(Room... params) {
             try {
-                return getDataFromApi(params[0]);
+                return client.updateBookings(Arrays.asList(params));
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
                 return null;
             }
         }
-
-        /**
-         * Fetch a list of the next 10 events from the primary calendar.
-         * @return List of Strings describing returned events.
-         * @throws IOException
-         */
-        private List<String> getDataFromApi(String floor) throws IOException {
-            // List the next free events for the given location events from the primary calendar.
-            DateTime now = new DateTime(System.currentTimeMillis());
-            List<FreeBusyRequestItem> fbItems = new ArrayList<>();
-
-            String[] rooms = getResources().getStringArray(getResources().getIdentifier(floor,"array", getApplicationInfo().packageName));
-            for (String room : rooms) {
-                String googleResource = CalendarUtils.getResourceString(room, RoomsListActivity.this);
-                prettyNameByGoogleResourceId.put(googleResource, room);
-                fbItems.add(new FreeBusyRequestItem().setId(googleResource));
-            }
-
-            FreeBusyResponse freebusy = mService.freebusy().query(
-                    new FreeBusyRequest()
-                            .setTimeMin(now)
-                            .setTimeMax(new DateTime(System.currentTimeMillis() + 3600000))
-                            .setItems(fbItems)
-            )
-                    .execute();
-
-            List<String> freeBusy = new ArrayList<>();
-            for ( Map.Entry<String, FreeBusyCalendar> entry : freebusy.getCalendars().entrySet()) {
-                FreeBusyCalendar cal = entry.getValue();
-                String info = "Room " + prettyNameByGoogleResourceId.get(entry.getKey()) + " is busy at times " + cal.getBusy().toString();
-                freeBusy.add(info);
-            }
-
-            return freeBusy;
-        }
-
 
         @Override
         protected void onPreExecute() {
@@ -292,12 +265,11 @@ public class RoomsListActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
+        protected void onPostExecute(List<Room> output) {
             mProgress.hide();
             if (output == null || output.size() == 0) {
                 mOutputText.setText("No results returned.");
             } else {
-                output.add(0, "Data retrieved using the Google Calendar API:");
                 mOutputText.setText(TextUtils.join("\n", output));
             }
         }

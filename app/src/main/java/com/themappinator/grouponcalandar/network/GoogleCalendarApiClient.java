@@ -96,7 +96,7 @@ public class GoogleCalendarApiClient {
                     room.booked = calendar.getBusy();
                 }
             }
-            i += 5;
+            i += REQUEST_SIZE;
         }
         return rooms;
     }

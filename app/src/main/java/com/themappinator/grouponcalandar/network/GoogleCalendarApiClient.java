@@ -2,6 +2,7 @@ package com.themappinator.grouponcalandar.network;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -29,6 +30,7 @@ import java.util.Map;
  */
 public class GoogleCalendarApiClient {
     private static final long ONE_DAY_MILLIES = 3600000;
+    private static final int REQUEST_SIZE = 5;
     GoogleAccountCredential mCredential;
     Context context;
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
@@ -69,28 +71,33 @@ public class GoogleCalendarApiClient {
      * @throws IOException
      */
     public List<Room> updateBookings(List<Room> rooms) throws IOException {
-        // List the next free booked for the given location booked from the primary calendar.
-        DateTime now = new DateTime(System.currentTimeMillis());
-        List<FreeBusyRequestItem> fbItems = new ArrayList<>();
-        for (Room room : rooms) {
-            fbItems.add(new FreeBusyRequestItem().setId(room.googleResourceId));
+        for(int i = 0; i < rooms.size(); ) {
+            // List the next free booked for the given location booked from the primary calendar.
+            DateTime now = new DateTime(System.currentTimeMillis());
+            List<FreeBusyRequestItem> fbItems = new ArrayList<>();
+            for (int j = i; (j < i + REQUEST_SIZE ) && (j < rooms.size()); j++) {
+                fbItems.add(new FreeBusyRequestItem().setId(rooms.get(j).googleResourceId));
+            }
+
+            FreeBusyResponse freebusy = getCalendarService().freebusy().query(
+                    new FreeBusyRequest()
+                            .setTimeMin(now)
+                            .setTimeMax(new DateTime(System.currentTimeMillis() + ONE_DAY_MILLIES))
+                            .setItems(fbItems)
+                    )
+                    .execute();
+
+            Map<String, FreeBusyCalendar> calendars = freebusy.getCalendars();
+            Log.d("GAPICLIENT","retrieved:" + calendars.toString());
+            // this is ineffecient - should fix
+            for (Room room : rooms) {
+                FreeBusyCalendar calendar = calendars.get(room.googleResourceId);
+                if (calendar != null) {
+                    room.booked = calendar.getBusy();
+                }
+            }
+            i += 5;
         }
-
-        FreeBusyResponse freebusy = getCalendarService().freebusy().query(
-                new FreeBusyRequest()
-                        .setTimeMin(now)
-                        .setTimeMax(new DateTime(System.currentTimeMillis() + ONE_DAY_MILLIES))
-                        .setItems(fbItems)
-        )
-                .execute();
-
-        Map<String, FreeBusyCalendar> calendars = freebusy.getCalendars();
-
-        for (Room room : rooms) {
-            FreeBusyCalendar calendar = calendars.get(room.googleResourceId);
-            room.booked = calendar.getBusy();
-        }
-
         return rooms;
     }
 }

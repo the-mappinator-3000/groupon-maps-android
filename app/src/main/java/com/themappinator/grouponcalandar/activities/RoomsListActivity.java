@@ -11,37 +11,34 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RoomsListActivity extends AppCompatActivity {
+    private RecyclerView rvRooms;
+    private RoomListAdapter aRooms;
+    private ArrayList<Room> rooms;
 
-    private TextView mOutputText;
     ProgressDialog mProgress;
     GoogleCalendarApiClient client;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private String[] floors;
-    private Map<String, String> prettyNameByGoogleResourceId;
 
     /**
      * Create the main activity.
@@ -50,32 +47,26 @@ public class RoomsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        floors = getResources().getStringArray(R.array.floors);
-        prettyNameByGoogleResourceId = new HashMap<>();
-
-        LinearLayout activityLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activityLayout.setLayoutParams(lp);
-        activityLayout.setOrientation(LinearLayout.VERTICAL);
-        activityLayout.setPadding(16, 16, 16, 16);
-
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        mOutputText = new TextView(this);
-        mOutputText.setLayoutParams(tlp);
-        mOutputText.setPadding(16, 16, 16, 16);
-        mOutputText.setVerticalScrollBarEnabled(true);
-        mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        activityLayout.addView(mOutputText);
+        setContentView(R.layout.activity_list);
+        rvRooms = (RecyclerView) findViewById(R.id.rvRooms);
+        rvRooms.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rooms = new ArrayList<>();
+        String[] floors = getResources().getStringArray(R.array.floors);
+        for (String floor : floors) {
+            String[] roomsNames = getResources().getStringArray(getResources().getIdentifier(floor, "array", getApplicationInfo().packageName));
+            for (String roomName : roomsNames) {
+                String googleResource = CalendarUtils.getResourceString(roomName, RoomsListActivity.this);
+                Room room = new Room();
+                room.floor = floor;
+                room.readableName = roomName;
+                room.googleResourceId = googleResource;
+                rooms.add(room);
+            }
+        }
+        aRooms = new RoomListAdapter(rooms);
+        rvRooms.setAdapter(aRooms);
 
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Calendar API ...");
-
-        setContentView(activityLayout);
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -94,8 +85,8 @@ public class RoomsListActivity extends AppCompatActivity {
         if (isGooglePlayServicesAvailable()) {
             refreshResults();
         } else {
-            mOutputText.setText("Google Play Services required: " +
-                    "after installing, close and relaunch this app.");
+            //mOutputText.setText("Google Play Services required: " +
+            //        "after installing, close and relaunch this app.");
         }
     }
 
@@ -133,7 +124,7 @@ public class RoomsListActivity extends AppCompatActivity {
                         editor.apply();
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    mOutputText.setText("Account unspecified.");
+                    //mOutputText.setText("Account unspecified.");
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -156,26 +147,11 @@ public class RoomsListActivity extends AppCompatActivity {
             chooseAccount();
         } else {
             if (isDeviceOnline()) {
-                getResults(floors[0]);
+                new MakeRequestTask(client).execute(rooms.toArray(new Room[rooms.size()]));
             } else {
-                mOutputText.setText("No network connection available.");
+                //mOutputText.setText("No network connection available.");
             }
         }
-    }
-
-    private void getResults(String floor) {
-        String[] roomsNames = getResources().getStringArray(getResources().getIdentifier(floor,"array", getApplicationInfo().packageName));
-        Room[] rooms = new Room[roomsNames.length];
-        for (int i = 0; i < roomsNames.length; i++) {
-            String googleResource = CalendarUtils.getResourceString(roomsNames[i], RoomsListActivity.this);
-            prettyNameByGoogleResourceId.put(googleResource, roomsNames[i]);
-            Room room = new Room();
-            room.floor = floor;
-            room.readableName = roomsNames[i];
-            room.googleResourceId = googleResource;
-            rooms[i] = room;
-        }
-        new MakeRequestTask(client).execute(rooms);
     }
 
     /**
@@ -260,7 +236,7 @@ public class RoomsListActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            mOutputText.setText("");
+            //mOutputText.setText("");
             mProgress.show();
         }
 
@@ -268,9 +244,10 @@ public class RoomsListActivity extends AppCompatActivity {
         protected void onPostExecute(List<Room> output) {
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                //mOutputText.setText("No results returned.");
             } else {
-                mOutputText.setText(TextUtils.join("\n", output));
+                aRooms.notifyDataSetChanged();
+                //mOutputText.setText(TextUtils.join("\n", output));
             }
         }
 
@@ -287,11 +264,11 @@ public class RoomsListActivity extends AppCompatActivity {
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             RoomsListActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    //mOutputText.setText("The following error occurred:\n"
+                    //        + mLastError.getMessage());
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                //mOutputText.setText("Request cancelled.");
             }
         }
     }

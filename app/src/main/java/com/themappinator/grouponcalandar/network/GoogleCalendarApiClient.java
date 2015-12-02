@@ -15,6 +15,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
@@ -31,7 +32,8 @@ import java.util.Map;
  * Client class used to manage api calls to google
  */
 public class GoogleCalendarApiClient {
-    private static final long ONE_DAY_MILLIES = 3600000;
+    public static final long ONE_DAY_MILLIES = 86400000;
+    public static final long HALF_HOUR_MILLIES = 1800000;
     private static final int REQUEST_SIZE = 5;
     GoogleAccountCredential mCredential;
     Context context;
@@ -103,12 +105,15 @@ public class GoogleCalendarApiClient {
         return rooms;
     }
 
+    // creates an event for half an hour starting now
     public void createEventAt(Room room) throws IOException {
         Event event = new Event();
         event.setAttendees(Arrays.asList(
                 new EventAttendee().setEmail(room.googleResourceId),
                 new EventAttendee().setEmail(mCredential.getSelectedAccount().name)
-        ));
+                ))
+            .setStart(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis())))
+            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis()+HALF_HOUR_MILLIES)));
         getCalendarService().events().insert(mCredential.getSelectedAccount().name,
                 event);
     }

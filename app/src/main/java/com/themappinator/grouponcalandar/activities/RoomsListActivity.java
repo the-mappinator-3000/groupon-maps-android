@@ -226,7 +226,7 @@ public class RoomsListActivity extends AppCompatActivity {
         @Override
         protected List<Room> doInBackground(Room... params) {
             try {
-                return client.updateBookings(Arrays.asList(params));
+                return client.getFreeBusy(Arrays.asList(params));
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);

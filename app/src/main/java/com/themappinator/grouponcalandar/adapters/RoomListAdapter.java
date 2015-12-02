@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.model.Room;
 
@@ -36,7 +37,12 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Room room = rooms.get(position);
-
+        DateTime now = new DateTime(System.currentTimeMillis());
+        if (room.isBusy(now)) {
+            holder.tvRoomName.setVisibility(View.GONE);
+        } else {
+            holder.tvRoomName.setVisibility(View.VISIBLE);
+        }
         holder.tvRoomName.setText(room.id);
     }
 

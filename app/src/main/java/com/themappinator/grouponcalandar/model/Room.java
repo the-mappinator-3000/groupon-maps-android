@@ -16,6 +16,15 @@ public class Room {
     public List<TimePeriod> booked = new ArrayList<>();
     public DateTime lastUpdated;
 
+    public boolean isBusy(DateTime time) {
+        for (TimePeriod period : booked) {
+            if(period.getStart().getValue() < time.getValue() && time.getValue() < period.getEnd().getValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return id + " booked:" + booked.toString();

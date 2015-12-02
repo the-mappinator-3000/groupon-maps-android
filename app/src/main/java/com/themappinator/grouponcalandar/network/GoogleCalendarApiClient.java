@@ -13,6 +13,8 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
@@ -60,7 +62,7 @@ public class GoogleCalendarApiClient {
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         return new com.google.api.services.calendar.Calendar.Builder(
                 transport, jsonFactory, mCredential)
-                .setApplicationName("Google Calendar API Android Quickstart")
+                .setApplicationName("Groupon Maps")
                 .build();
     }
 
@@ -70,7 +72,7 @@ public class GoogleCalendarApiClient {
      * @return the updated rooms
      * @throws IOException
      */
-    public List<Room> updateBookings(List<Room> rooms) throws IOException {
+    public List<Room> getFreeBusy(List<Room> rooms) throws IOException {
         for(int i = 0; i < rooms.size(); ) {
             // List the next free booked for the given location booked from the primary calendar.
             DateTime now = new DateTime(System.currentTimeMillis());
@@ -99,5 +101,15 @@ public class GoogleCalendarApiClient {
             i += REQUEST_SIZE;
         }
         return rooms;
+    }
+
+    public void createEventAt(Room room) throws IOException {
+        Event event = new Event();
+        event.setAttendees(Arrays.asList(
+                new EventAttendee().setEmail(room.googleResourceId),
+                new EventAttendee().setEmail(mCredential.getSelectedAccount().name)
+        ));
+        getCalendarService().events().insert(mCredential.getSelectedAccount().name,
+                event);
     }
 }

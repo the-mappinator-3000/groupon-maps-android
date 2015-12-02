@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class Room {
     public String floor;
-    public String readableName;
+    public String id;
     public String googleResourceId;
     public List<TimePeriod> booked = new ArrayList<>();
     public DateTime lastUpdated;
 
     @Override
     public String toString() {
-        return readableName + " booked:" + booked.toString();
+        return id + " booked:" + booked.toString();
     }
 }

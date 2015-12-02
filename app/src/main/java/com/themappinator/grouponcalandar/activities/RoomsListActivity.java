@@ -58,7 +58,7 @@ public class RoomsListActivity extends AppCompatActivity {
                 String googleResource = CalendarUtils.getResourceString(roomName, RoomsListActivity.this);
                 Room room = new Room();
                 room.floor = floor;
-                room.readableName = roomName;
+                room.id = roomName;
                 room.googleResourceId = googleResource;
                 rooms.add(room);
             }

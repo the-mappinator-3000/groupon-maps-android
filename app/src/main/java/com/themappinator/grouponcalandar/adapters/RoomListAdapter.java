@@ -37,7 +37,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Room room = rooms.get(position);
 
-        holder.tvRoomName.setText(room.readableName);
+        holder.tvRoomName.setText(room.id);
     }
 
     @Override

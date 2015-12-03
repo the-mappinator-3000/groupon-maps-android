@@ -63,7 +63,7 @@ public class RoomsListActivity extends AppCompatActivity {
                 rooms.add(room);
             }
         }
-        aRooms = new RoomListAdapter(rooms);
+        aRooms = new RoomListAdapter(this, rooms);
         rvRooms.setAdapter(aRooms);
 
         mProgress = new ProgressDialog(this);
@@ -72,6 +72,18 @@ public class RoomsListActivity extends AppCompatActivity {
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         client = new GoogleCalendarApiClient(getApplicationContext(),
                 settings.getString(PREF_ACCOUNT_NAME, null));
+
+        if (savedInstanceState == null) {
+            // Note / Question: calling it here instead of onResume() because, when
+            // we come back from MapActivity, we don't want to wait until refresh
+            // goes through...  background non-blocking refresh? (AvY)
+            if (isGooglePlayServicesAvailable()) {
+                refreshResults();
+            } else {
+                //mOutputText.setText("Google Play Services required: " +
+                //        "after installing, close and relaunch this app.");
+            }
+        }
     }
 
 
@@ -82,12 +94,6 @@ public class RoomsListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isGooglePlayServicesAvailable()) {
-            refreshResults();
-        } else {
-            //mOutputText.setText("Google Play Services required: " +
-            //        "after installing, close and relaunch this app.");
-        }
     }
 
     /**

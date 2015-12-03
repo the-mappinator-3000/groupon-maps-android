@@ -1,6 +1,7 @@
 package com.themappinator.grouponcalandar.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.activities.MapActivity;
 import com.themappinator.grouponcalandar.model.Room;
 
 import java.util.List;
@@ -16,8 +18,10 @@ import java.util.List;
 public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
 
     private List<Room> rooms;
+    Context context;
 
-    public RoomListAdapter(List<Room> rooms) {
+    public RoomListAdapter(Context context, List<Room> rooms) {
+        this.context = context;
         this.rooms = rooms;
     }
 
@@ -57,6 +61,16 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             tvRoomName = (TextView) itemView.findViewById(R.id.tvRoomName);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(RoomListAdapter.this.context, MapActivity.class);
+                    Room room = RoomListAdapter.this.rooms.get(getLayoutPosition());
+                    intent.putExtra("room", room);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

@@ -113,7 +113,7 @@ public class GoogleCalendarApiClient {
                 new EventAttendee().setEmail(mCredential.getSelectedAccount().name)
                 ))
             .setStart(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis())))
-            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis()+HALF_HOUR_MILLIES)));
+            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis() + HALF_HOUR_MILLIES)));
         getCalendarService().events().insert(mCredential.getSelectedAccount().name,
                 event);
     }

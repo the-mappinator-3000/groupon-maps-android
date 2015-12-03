@@ -47,7 +47,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         } else {
             holder.tvRoomName.setVisibility(View.VISIBLE);
         }
-        holder.tvRoomName.setText(room.id);
+        holder.tvRoomName.setText(room.name);
     }
 
     @Override

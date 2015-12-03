@@ -16,6 +16,7 @@ import java.util.List;
 public class Room implements Parcelable {
     public String floor;
     public String id;
+    public String name;
     public String googleResourceId;
     public List<TimePeriod> booked = new ArrayList<>();
     public DateTime lastUpdated;
@@ -36,7 +37,7 @@ public class Room implements Parcelable {
 
     @Override
     public String toString() {
-        return id + " floor:" + floor + " booked:" + booked.toString();
+        return name + " floor:" + floor + " booked:" + booked.toString();
     }
 
     @Override
@@ -48,6 +49,7 @@ public class Room implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.floor);
         dest.writeString(this.id);
+        dest.writeString(this.name);
         dest.writeString(this.googleResourceId);
         // TODO: Figure out why I have a crash caused by:
         // TODO: java.lang.RuntimeException: Parcelable encountered ClassNotFoundException reading a Serializable object (name = com.google.api.client.util.DateTime)
@@ -62,6 +64,7 @@ public class Room implements Parcelable {
     protected Room(Parcel in) {
         this.floor = in.readString();
         this.id = in.readString();
+        this.name = in.readString();
         this.googleResourceId = in.readString();
         this.booked = new ArrayList<TimePeriod>();
         in.readList(this.booked, List.class.getClassLoader());

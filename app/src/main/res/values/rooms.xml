@@ -20,6 +20,12 @@
     <string name="pa4_1_zombie_invasion">groupon.com_333435353838322d3136@resource.calendar.google.com</string>
     <string name="pa4_1_nuclear_winter">groupon.com_2d33333437353638362d383133@resource.calendar.google.com</string>
 
+    <string name="pa4_1_running_with_scissors_pretty">Running With Scissors</string>
+    <string name="pa4_1_irs_audit_pretty">IRS Audit</string>
+    <string name="pa4_1_lion_tipping_pretty">Lion Tipping</string>
+    <string name="pa4_1_zombie_invasion_pretty">Zombie Invasion</string>
+    <string name="pa4_1_nuclear_winter_pretty">Nuclear Winter</string>
+
     <string-array name="pa4_2">
         <item>pa4_2_coupon_detat</item>
         <item>pa4_2_shapes_and_colors</item>
@@ -28,6 +34,10 @@
     <string name="pa4_2_coupon_detat">groupon.com_37363532393933332d3337@resource.calendar.google.com</string>
     <string name="pa4_2_shapes_and_colors">groupon.com_323830373232372d3932@resource.calendar.google.com</string>
     <string name="pa4_2_dealpig">groupon.com_3333313631303338393532@resource.calendar.google.com</string>
+
+    <string name="pa4_2_coupon_detat_pretty">Coupon d\'Etat</string>
+    <string name="pa4_2_shapes_and_colors_pretty">Shapes and Colors</string>
+    <string name="pa4_2_dealpig_pretty">DealPig</string>
 
     <string-array name="pa4_3">
         <item>pa4_3_abs_of_steel</item>
@@ -51,6 +61,17 @@
     <string name="pa4_3_legally_drunk">groupon.com_33343639363130352d333736@resource.calendar.google.com</string>
     <string name="pa4_3_the_patio">groupon.com_2d32373435323337302d343033@resource.calendar.google.com</string>
     <string name="pa4_3_lets_take_this_offline">groupon.com_2d3333323935363437393536@resource.calendar.google.com</string>
+
+    <string name="pa4_3_abs_of_steel_pretty">Abs of Steel</string>
+    <string name="pa4_3_boil_the_ocean_pretty">Boil the Ocean</string>
+    <string name="pa4_3_wicked_good_pretty">Wicked Good</string>
+    <string name="pa4_3_shamwow_pretty">ShamWow</string>
+    <string name="pa4_3_antonios_nut_house_pretty">Antonio\'s Nut House</string>
+    <string name="pa4_3_act_natural_pretty">Act Natural</string>
+    <string name="pa4_3_chia_pet_pretty">Chia Pet</string>
+    <string name="pa4_3_legally_drunk_pretty">Legally Drunk</string>
+    <string name="pa4_3_the_patio_pretty">The Patio</string>
+    <string name="pa4_3_lets_take_this_offline_pretty">Let\'s Take This Offline</string>
 
     <string-array name="pa5_1">
         <item>pa5_1_mr_petersons_office</item>
@@ -76,4 +97,16 @@
     <string name="pa5_1_miltons_stapler">groupon.com_363036343934362d333631@resource.calendar.google.com</string>
     <string name="pa5_1_jump_to_conclusions">groupon.com_2d3938333130323730323133@resource.calendar.google.com</string>
     <string name="pa5_1_the_other_michael_bolton">groupon.com_2d39353138303134352d323239@resource.calendar.google.com</string>
+
+    <string name="pa5_1_mr_petersons_office_pretty">Mr. Peterson\'s Office</string>
+    <string name="pa5_1_do_not_reply_all_pretty">DO NOT REPLY ALL</string>
+    <string name="pa5_1_no_loitering_pretty">No Loitering</string>
+    <string name="pa5_1_15_items_or_less_pretty">15 Items or Less</string>
+    <string name="pa5_1_no_flash_photography_pretty">No Flash Photography</string>
+    <string name="pa5_1_you_break_you_buy_pretty">You Break, You Buy</string>
+    <string name="pa5_1_no_groupon_parking_pretty">No Groupon Parking</string>
+    <string name="pa5_1_pieces_of_flair_pretty">Pieces of Flair</string>
+    <string name="pa5_1_miltons_stapler_pretty">Milton\'s Stapler</string>
+    <string name="pa5_1_jump_to_conclusions_pretty">Jump to Conclusions</string>
+    <string name="pa5_1_the_other_michael_bolton_pretty">The Other Michael Bolton</string>
 </resources>

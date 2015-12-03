@@ -35,12 +35,26 @@ public class GoogleCalendarApiClient {
     public static final long ONE_DAY_MILLIES = 86400000;
     public static final long HALF_HOUR_MILLIES = 1800000;
     private static final int REQUEST_SIZE = 5;
-    GoogleAccountCredential mCredential;
-    Context context;
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    private GoogleAccountCredential mCredential;
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR };
 
-    public GoogleCalendarApiClient(Context context, String selectedAccount) {
-        this.context = context;
+    private static GoogleCalendarApiClient instance;
+
+    public static GoogleCalendarApiClient getInstance(Context applicationContext, String selectedAccount) {
+        if (instance == null) {
+            instance = new GoogleCalendarApiClient(applicationContext, selectedAccount);
+        }
+        return instance;
+    }
+
+    public static GoogleCalendarApiClient getInstance() {
+        if (instance == null) {
+            throw new ExceptionInInitializerError();
+        }
+        return instance;
+    }
+
+    private GoogleCalendarApiClient(Context context, String selectedAccount) {
         mCredential = GoogleAccountCredential.usingOAuth2(
                 context, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff())
@@ -111,10 +125,13 @@ public class GoogleCalendarApiClient {
         event.setAttendees(Arrays.asList(
                 new EventAttendee().setEmail(room.googleResourceId),
                 new EventAttendee().setEmail(mCredential.getSelectedAccount().name)
-                ))
+        ))
             .setStart(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis())))
-            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis()+HALF_HOUR_MILLIES)));
-        getCalendarService().events().insert(mCredential.getSelectedAccount().name,
-                event);
+            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis() + HALF_HOUR_MILLIES)))
+            .setSummary("Impromptu Meeting");
+        Event e = getCalendarService().events().insert(mCredential.getSelectedAccount().name,
+                event).execute();
+
+        Log.d("Event", e.toPrettyString());
     }
 }

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RoomsListActivity extends AppCompatActivity {
+    private static final String PRETTY_SUFFIX = "_pretty";
     private RecyclerView rvRooms;
     private RoomListAdapter aRooms;
     private ArrayList<Room> rooms;
@@ -53,12 +54,14 @@ public class RoomsListActivity extends AppCompatActivity {
         rooms = new ArrayList<>();
         String[] floors = getResources().getStringArray(R.array.floors);
         for (String floor : floors) {
-            String[] roomsNames = getResources().getStringArray(getResources().getIdentifier(floor, "array", getApplicationInfo().packageName));
-            for (String roomName : roomsNames) {
-                String googleResource = CalendarUtils.getResourceString(roomName, RoomsListActivity.this);
+            String[] roomIds = getResources().getStringArray(getResources().getIdentifier(floor, "array", getApplicationInfo().packageName));
+            for (String roomId : roomIds) {
+                String googleResource = CalendarUtils.getResourceString(roomId, RoomsListActivity.this);
+                String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, RoomsListActivity.this);
                 Room room = new Room();
                 room.floor = floor;
-                room.id = roomName;
+                room.id = roomId;
+                room.name = name;
                 room.googleResourceId = googleResource;
                 rooms.add(room);
             }
@@ -70,7 +73,7 @@ public class RoomsListActivity extends AppCompatActivity {
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        client = new GoogleCalendarApiClient(getApplicationContext(),
+        client = GoogleCalendarApiClient.getInstance(getApplicationContext(),
                 settings.getString(PREF_ACCOUNT_NAME, null));
 
         if (savedInstanceState == null) {

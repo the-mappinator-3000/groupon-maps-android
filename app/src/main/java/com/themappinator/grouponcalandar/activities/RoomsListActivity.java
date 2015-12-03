@@ -73,7 +73,7 @@ public class RoomsListActivity extends AppCompatActivity {
 
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        client = new GoogleCalendarApiClient(getApplicationContext(),
+        client = GoogleCalendarApiClient.getInstance(getApplicationContext(),
                 settings.getString(PREF_ACCOUNT_NAME, null));
 
         if (savedInstanceState == null) {

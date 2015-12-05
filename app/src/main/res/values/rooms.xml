@@ -15,17 +15,34 @@
         <item>pa4_1_zombie_invasion</item>
         <item>pa4_1_nuclear_winter</item>
     </string-array>
+    <string-array name="pa4_1_extra">
+        <item>pa4_1_spontaneous_human_combustion_CANT_RESERVE</item>
+        <item>pa4_1_design_by_committe_CANT_RESERVE</item>
+        <item>pa4_1_bee_pinata_CANT_RESERVE</item>
+        <item>pa4_1_crocodile_dundeal_CANT_RESERVE</item>
+        <item>pa4_1_recruiting_only_CANT_RESERVE</item>
+    </string-array>
     <string name="pa4_1_running_with_scissors">groupon.com_2d39363835323336302d333035@resource.calendar.google.com</string>
     <string name="pa4_1_irs_audit">groupon.com_33323633363931342d323338@resource.calendar.google.com</string>
     <string name="pa4_1_lion_tipping">groupon.com_3932313735323337373730@resource.calendar.google.com</string>
     <string name="pa4_1_zombie_invasion">groupon.com_333435353838322d3136@resource.calendar.google.com</string>
     <string name="pa4_1_nuclear_winter">groupon.com_2d33333437353638362d383133@resource.calendar.google.com</string>
+    <string name="pa4_1_spontaneous_human_combustion_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
+    <string name="pa4_1_design_by_committe_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
+    <string name="pa4_1_bee_pinata_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
+    <string name="pa4_1_crocodile_dundeal_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
+    <string name="pa4_1_recruiting_only_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
 
     <string name="pa4_1_running_with_scissors_pretty">Running With Scissors</string>
     <string name="pa4_1_irs_audit_pretty">IRS Audit</string>
     <string name="pa4_1_lion_tipping_pretty">Lion Tipping</string>
     <string name="pa4_1_zombie_invasion_pretty">Zombie Invasion</string>
     <string name="pa4_1_nuclear_winter_pretty">Nuclear Winter</string>
+    <string name="pa4_1_spontaneous_human_combustion_CANT_RESERVE_pretty">Spontaneous Human Combustion</string>
+    <string name="pa4_1_design_by_committe_CANT_RESERVE_pretty">Design By Committee</string>
+    <string name="pa4_1_bee_pinata_CANT_RESERVE_pretty">Bee Pinata</string>
+    <string name="pa4_1_crocodile_dundeal_CANT_RESERVE_pretty">Crocodile Dundeal</string>
+    <string name="pa4_1_recruiting_only_CANT_RESERVE_pretty">Recruiting Only</string>
 
     <string name="pa4_2">PA4-2</string>
     <string-array name="pa4_2">

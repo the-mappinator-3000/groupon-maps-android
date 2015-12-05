@@ -8,6 +8,7 @@ import com.google.api.services.calendar.model.TimePeriod;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +20,10 @@ public class Room implements Parcelable {
     public String id;
     public String name;
     public String googleResourceId;
-    public List<TimePeriod> booked = new ArrayList<>();
+    // initially booked for all eternity
+    public List<TimePeriod> booked = Arrays.asList(new TimePeriod()
+                                                        .setStart(new DateTime(0))
+                                                        .setEnd(new DateTime(Long.MAX_VALUE)));
     public DateTime lastUpdated;
 
     /**

@@ -1,5 +1,7 @@
 package com.themappinator.grouponcalandar.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -7,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.activities.MapActivity;
+import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.adapters.RoomListType;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
@@ -66,5 +70,24 @@ public class BrowseRoomListFragment extends RoomListFragment {
                 return r1.name.compareToIgnoreCase(r2.name);
             }
         });
+    }
+
+    @Override
+    protected RoomListType getType() {
+        return RoomListType.Browse;
+    }
+
+    @Override
+    protected RoomListAdapter.RoomClickListener getRoomClickListener() {
+        return new RoomListAdapter.RoomClickListener() {
+            @Override
+            public void onRoomClick(int position) {
+                Room room = rooms.get(position);
+                Context context = getContext();
+                Intent intent = new Intent(context, MapActivity.class);
+                intent.putExtra(Room.TAG, room);
+                context.startActivity(intent);
+            }
+        };
     }
 }

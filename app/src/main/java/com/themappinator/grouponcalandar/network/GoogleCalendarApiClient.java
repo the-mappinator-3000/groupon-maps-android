@@ -33,7 +33,8 @@ import java.util.Map;
  */
 public class GoogleCalendarApiClient {
     public static final long ONE_DAY_MILLIES = 86400000;
-    public static final long HALF_HOUR_MILLIES = 1800000;
+    public static final long ONE_HOUR_MILLIES = 3600000;
+    public static final long THREE_QUATER_HOUR_MILLIES = 2700000;
     private static final int REQUEST_SIZE = 5;
     private GoogleAccountCredential mCredential;
     private static final String[] SCOPES = { CalendarScopes.CALENDAR };
@@ -100,13 +101,12 @@ public class GoogleCalendarApiClient {
             FreeBusyResponse freebusy = getCalendarService().freebusy().query(
                     new FreeBusyRequest()
                             .setTimeMin(now)
-                            .setTimeMax(new DateTime(System.currentTimeMillis() + ONE_DAY_MILLIES))
+                            .setTimeMax(new DateTime(System.currentTimeMillis() + 2 * ONE_DAY_MILLIES))
                             .setItems(fbItems)
-                    )
+            )
                     .execute();
 
             Map<String, FreeBusyCalendar> calendars = freebusy.getCalendars();
-            Log.d("GAPICLIENT","retrieved:" + calendars.toString());
             // this is ineffecient - should fix
             for (Room room : rooms) {
                 FreeBusyCalendar calendar = calendars.get(room.googleResourceId);
@@ -119,16 +119,16 @@ public class GoogleCalendarApiClient {
         return rooms;
     }
 
-    // creates an event for half an hour starting now
-    public void createEventAt(Room room) throws IOException {
+    public void createEventAt(Room room, DateTime start, DateTime end, String summary, String details) throws IOException {
         Event event = new Event();
         event.setAttendees(Arrays.asList(
                 new EventAttendee().setEmail(room.googleResourceId),
                 new EventAttendee().setEmail(mCredential.getSelectedAccount().name)
         ))
-            .setStart(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis())))
-            .setEnd(new EventDateTime().setDateTime(new DateTime(System.currentTimeMillis() + HALF_HOUR_MILLIES)))
-            .setSummary("Impromptu Meeting");
+            .setStart(new EventDateTime().setDateTime(start))
+            .setEnd(new EventDateTime().setDateTime(end))
+            .setSummary(summary)
+            .setDescription(details);
         Event e = getCalendarService().events().insert(mCredential.getSelectedAccount().name,
                 event).execute();
 

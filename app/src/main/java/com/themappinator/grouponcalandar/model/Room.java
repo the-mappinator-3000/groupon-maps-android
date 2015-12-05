@@ -14,6 +14,7 @@ import java.util.List;
  * Represents a room in the palo alto offices
  */
 public class Room implements Parcelable {
+    public static final String TAG = "room";
     public String floor;
     public String id;
     public String name;
@@ -27,8 +28,14 @@ public class Room implements Parcelable {
      * @return true if the room is booked
      */
     public boolean isBusy(DateTime time) {
+        long nowStart = time.getValue();
+        long nowEnd = nowStart + GoogleCalendarApiClient.ONE_HOUR_MILLIES;
         for (TimePeriod period : booked) {
-            if(period.getStart().getValue() < time.getValue() && time.getValue() + GoogleCalendarApiClient.HALF_HOUR_MILLIES < period.getEnd().getValue()) {
+            long start = period.getStart().getValue();
+            long end = period.getEnd().getValue();
+            if ((start < nowStart && nowStart < end) || // booking overlaps start of hour
+                    (start < nowEnd || end < nowEnd) || // booking overlaps end of hour
+                    (nowStart < start && end < nowEnd)) { // booking within the hour
                 return true;
             }
         }

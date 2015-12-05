@@ -10,8 +10,9 @@ import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
-import com.themappinator.grouponcalandar.activities.MapActivity;
+import com.themappinator.grouponcalandar.activities.BookEventActivity;
 import com.themappinator.grouponcalandar.model.Room;
+import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         } else {
             holder.tvRoomName.setVisibility(View.VISIBLE);
         }
-        holder.tvRoomName.setText(room.name);
+        holder.tvRoomName.setText(CalendarUtils.getResourceString(room.floor, context) + " " + room.name);
     }
 
     @Override
@@ -65,9 +66,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(RoomListAdapter.this.context, MapActivity.class);
+                    Intent intent = new Intent(RoomListAdapter.this.context, BookEventActivity.class);
                     Room room = RoomListAdapter.this.rooms.get(getLayoutPosition());
-                    intent.putExtra("room", room);
+                    intent.putExtra(Room.TAG, room);
                     context.startActivity(intent);
                 }
             });

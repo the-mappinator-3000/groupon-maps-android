@@ -7,6 +7,7 @@
         <item>pa5_1</item>
     </string-array>
 
+    <string name="pa4_1">PA4-1</string>
     <string-array name="pa4_1">
         <item>pa4_1_running_with_scissors</item>
         <item>pa4_1_irs_audit</item>
@@ -43,6 +44,7 @@
     <string name="pa4_1_crocodile_dundeal_CANT_RESERVE_pretty">Crocodile Dundeal</string>
     <string name="pa4_1_recruiting_only_CANT_RESERVE_pretty">Recruiting Only</string>
 
+    <string name="pa4_2">PA4-2</string>
     <string-array name="pa4_2">
         <item>pa4_2_coupon_detat</item>
         <item>pa4_2_shapes_and_colors</item>
@@ -56,6 +58,7 @@
     <string name="pa4_2_shapes_and_colors_pretty">Shapes and Colors</string>
     <string name="pa4_2_dealpig_pretty">DealPig</string>
 
+    <string name="pa4_3">PA4-3</string>
     <string-array name="pa4_3">
         <item>pa4_3_abs_of_steel</item>
         <item>pa4_3_boil_the_ocean</item>
@@ -90,6 +93,7 @@
     <string name="pa4_3_the_patio_pretty">The Patio</string>
     <string name="pa4_3_lets_take_this_offline_pretty">Let\'s Take This Offline</string>
 
+    <string name="pa5_1">PA5-1</string>
     <string-array name="pa5_1">
         <item>pa5_1_mr_petersons_office</item>
         <item>pa5_1_do_not_reply_all</item>

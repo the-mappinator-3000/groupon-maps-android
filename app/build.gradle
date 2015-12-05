@@ -32,4 +32,5 @@ dependencies {
     compile('com.google.apis:google-api-services-calendar:v3-rev125-1.20.0') {
         exclude group: 'org.apache.httpcomponents'
     }
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }

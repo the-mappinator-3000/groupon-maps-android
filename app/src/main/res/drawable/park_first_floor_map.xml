@@ -139,7 +139,7 @@
         android:pathData="M148.7 369.4c-0.3 0 -0.6 -0.1 -0.8 -0.3 -0.2 -0.2 -0.3 -0.4 -0.3 -0.7 0 -0.3 0.1 -0.6 0.3 -0.8 0.2 -0.2 0.4 -0.3 0.8 -0.3 0.3 0 0.6 0.1 0.8 0.3 0.2 0.2 0.3 0.4 0.3 0.8 0 0.3 -0.1 0.6 -0.3 0.7 -0.2 0.2 -0.5 0.3 -0.8 0.3z"
         android:fillColor="#a7a9ac" />
     <path
-        android:name="pa4_1_spontenious_human_combustion_CANT_RESERVE"
+        android:name="pa4_1_spontaneous_human_combustion_CANT_RESERVE"
         android:pathData="M798.6 603.9l-18.7 0 0 -37.3 0 -207.8 208 0 0 245.1z"
         android:fillColor="#a7a9ab" />
     <path

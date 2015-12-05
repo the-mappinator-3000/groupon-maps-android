@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
+import com.themappinator.grouponcalandar.adapters.RoomListType;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by ayegorov on 12/4/15.
  */
-public class RoomListFragment extends Fragment {
+public abstract class RoomListFragment extends Fragment {
 
     protected static final String PRETTY_SUFFIX = "_pretty";
 
@@ -30,7 +31,6 @@ public class RoomListFragment extends Fragment {
 
     protected SwipeRefreshLayout swipeRefreshLayout;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,19 +39,16 @@ public class RoomListFragment extends Fragment {
         // Rooms list
         //
         View parentView = inflater.inflate(R.layout.fragment_room_list, container, false);
-
         rvRooms = (RecyclerView) parentView.findViewById(R.id.rvRooms);
-
         rvRooms.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-
-        aRooms = new RoomListAdapter(getActivity(), rooms);
+        aRooms = new RoomListAdapter(getActivity(), rooms, getType());
+        aRooms.setRoomClickListener(getRoomClickListener());
         rvRooms.setAdapter(aRooms);
 
         //
         // Swipe to refresh
         //
         swipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById(R.id.swipeContainer);
-
         return parentView;
     }
 
@@ -75,4 +72,8 @@ public class RoomListFragment extends Fragment {
             }
         }
     }
+
+    protected abstract RoomListType getType();
+
+    protected abstract RoomListAdapter.RoomClickListener getRoomClickListener();
 }

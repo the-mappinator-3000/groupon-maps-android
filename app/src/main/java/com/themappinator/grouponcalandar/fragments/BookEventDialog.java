@@ -1,28 +1,33 @@
-package com.themappinator.grouponcalandar.activities;
+package com.themappinator.grouponcalandar.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
+import com.themappinator.grouponcalandar.activities.MapActivity;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class BookEventActivity extends AppCompatActivity {
-
+/**
+ * Created by lsilberstein on 12/6/15.
+ */
+public class BookEventDialog extends DialogFragment {
     private Room selectedRoom;
     private GoogleCalendarApiClient client;
     private ProgressDialog mProgress;
@@ -34,19 +39,34 @@ public class BookEventActivity extends AppCompatActivity {
     @Bind(R.id.btnBook) Button btnBook;
     @Bind(R.id.btnCancel) Button btnCancel;
 
+    public BookEventDialog() {
+        // Empty constructor is required for DialogFragment
+        // Make sure not to add arguments to the constructor
+        // Use `newInstance` instead as shown below
+    }
+
+    public static BookEventDialog newInstance(Room room) {
+        BookEventDialog frag = new BookEventDialog();
+        Bundle args = new Bundle();
+        args.putParcelable(Room.TAG, room);
+        frag.setArguments(args);
+        return frag;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_event);
-        ButterKnife.bind(this);
-        Intent intent = getIntent();
-        selectedRoom = intent.getParcelableExtra(Room.TAG);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_book_event, container);
+        ButterKnife.bind(this, view);
+        Bundle args = getArguments();
+        selectedRoom = args.getParcelable(Room.TAG);
         client = GoogleCalendarApiClient.getInstance();
-        mProgress = new ProgressDialog(this);
+        mProgress = new ProgressDialog(getContext());
 
         tvSummary.setText(getResources().getString(R.string.room_booking_title, selectedRoom.name));
         setupButtons();
         setupEditText();
+        return view;
     }
 
     private void setupEditText() {
@@ -89,7 +109,7 @@ public class BookEventActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                dismiss();
             }
         });
         btnBook.setOnClickListener(new View.OnClickListener() {
@@ -139,8 +159,9 @@ public class BookEventActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgress.hide();
-            Intent i = new Intent(BookEventActivity.this, MapActivity.class);
+            Intent i = new Intent(getContext(), MapActivity.class);
             i.putExtra(Room.TAG, selectedRoom);
+            dismiss();
             startActivity(i);
         }
 
@@ -152,4 +173,5 @@ public class BookEventActivity extends AppCompatActivity {
             }
         }
     }
+
 }

@@ -33,7 +33,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".activities.MapActivity" />
-        <activity android:name=".activities.BookEventActivity"></activity>
     </application>
 
 </manifest>

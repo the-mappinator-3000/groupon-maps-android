@@ -111,6 +111,11 @@ public class GoogleCalendarApiClient {
             for (Room room : rooms) {
                 FreeBusyCalendar calendar = calendars.get(room.googleResourceId);
                 if (calendar != null) {
+                    if (calendar.getErrors() != null && !calendar.getErrors().isEmpty())
+                    {
+                        Log.e("GCAPI", room.name + ":" + calendar.getErrors().toString());
+                        continue;
+                    }
                     room.booked = calendar.getBusy();
                 }
             }

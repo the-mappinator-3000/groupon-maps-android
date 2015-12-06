@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public abstract class RoomListFragment extends Fragment {
 
     protected static final String PRETTY_SUFFIX = "_pretty";
+    private static final String ROOMS_LIST_KEY = "rooms_list";
 
     protected RecyclerView rvRooms;
     protected RoomListAdapter aRooms;
@@ -56,21 +57,32 @@ public abstract class RoomListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        rooms = new ArrayList<>();
-        String[] floors = getResources().getStringArray(R.array.floors);
-        for (String floor : floors) {
-            String[] roomIds = getResources().getStringArray(getResources().getIdentifier(floor, "array", getActivity().getApplicationInfo().packageName));
-            for (String roomId : roomIds) {
-                String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
-                String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
-                Room room = new Room();
-                room.floor = floor;
-                room.id = roomId;
-                room.name = name;
-                room.googleResourceId = googleResource;
-                rooms.add(room);
+        if (savedInstanceState == null) {
+            rooms = new ArrayList<>();
+            String[] floors = getResources().getStringArray(R.array.floors);
+            for (String floor : floors) {
+                String[] roomIds = getResources().getStringArray(getResources().getIdentifier(floor, "array", getActivity().getApplicationInfo().packageName));
+                for (String roomId : roomIds) {
+                    String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
+                    String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
+                    Room room = new Room();
+                    room.floor = floor;
+                    room.id = roomId;
+                    room.name = name;
+                    room.googleResourceId = googleResource;
+                    rooms.add(room);
+                }
             }
+        } else {
+            // we are recreating the fragment so just pull the rooms from the saved state
+            rooms = savedInstanceState.getParcelableArrayList(ROOMS_LIST_KEY);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(ROOMS_LIST_KEY, rooms);
     }
 
     protected abstract RoomListType getType();

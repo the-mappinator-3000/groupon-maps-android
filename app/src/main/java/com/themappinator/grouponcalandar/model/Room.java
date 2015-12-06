@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Represents a room in the palo alto offices
  */
-public class Room implements Parcelable {
+public class Room implements Parcelable{
     public static final String TAG = "room";
     public String floor;
     public String id;
@@ -62,10 +62,14 @@ public class Room implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.googleResourceId);
-        // TODO: Figure out why I have a crash caused by:
-        // TODO: java.lang.RuntimeException: Parcelable encountered ClassNotFoundException reading a Serializable object (name = com.google.api.client.util.DateTime)
-        // TODO:                         (AvY)
-//        dest.writeList(this.booked);
+        // store the number of start, end longs we are saving
+        dest.writeInt(booked.size());
+        for (TimePeriod t : booked ) {
+            long start = t.getStart().getValue();
+            long end = t.getEnd().getValue();
+            dest.writeLong(start);
+            dest.writeLong(end);
+        }
         dest.writeSerializable(this.lastUpdated);
     }
 
@@ -77,8 +81,14 @@ public class Room implements Parcelable {
         this.id = in.readString();
         this.name = in.readString();
         this.googleResourceId = in.readString();
+        // put back all the TimePeriods into the booked list
+        int count = in.readInt();
         this.booked = new ArrayList<TimePeriod>();
-        in.readList(this.booked, List.class.getClassLoader());
+        for (int i = 0; i < count; i++) {
+            long start = in.readLong();
+            long end = in.readLong();
+            booked.add(new TimePeriod().setStart(new DateTime(start)).setEnd(new DateTime(end)));
+        }
         this.lastUpdated = (DateTime) in.readSerializable();
     }
 

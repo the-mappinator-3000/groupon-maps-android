@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
@@ -31,7 +30,6 @@ public class BookEventDialog extends DialogFragment {
     private Room selectedRoom;
     private GoogleCalendarApiClient client;
     private ProgressDialog mProgress;
-    @Bind(R.id.tvSummary) TextView tvSummary;
     @Bind(R.id.etSummary) EditText etSummary;
     private String summaryText;
     @Bind(R.id.etDetails) EditText etDetails;
@@ -63,13 +61,14 @@ public class BookEventDialog extends DialogFragment {
         client = GoogleCalendarApiClient.getInstance();
         mProgress = new ProgressDialog(getContext());
 
-        tvSummary.setText(getResources().getString(R.string.room_booking_title, selectedRoom.name));
+        getDialog().setTitle(getResources().getString(R.string.room_booking_title, selectedRoom.name));
         setupButtons();
         setupEditText();
         return view;
     }
 
     private void setupEditText() {
+        etSummary.setHint(getResources().getString(R.string.booking_summary));
         etSummary.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,6 +86,7 @@ public class BookEventDialog extends DialogFragment {
             }
         });
 
+        etDetails.setHint(getResources().getString(R.string.event_details));
         etDetails.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

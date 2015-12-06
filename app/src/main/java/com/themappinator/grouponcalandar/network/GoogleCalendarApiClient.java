@@ -135,7 +135,8 @@ public class GoogleCalendarApiClient {
             .setStart(new EventDateTime().setDateTime(start))
             .setEnd(new EventDateTime().setDateTime(end))
             .setSummary(summary)
-            .setDescription(details);
+            .setDescription(details)
+            .setLocation(room.name);
         Event e = getCalendarService().events().insert(mCredential.getSelectedAccount().name,
                 event).execute();
 

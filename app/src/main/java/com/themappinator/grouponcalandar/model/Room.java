@@ -3,28 +3,43 @@ package com.themappinator.grouponcalandar.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Represents a room in the palo alto offices
  */
-public class Room implements Parcelable{
+@Table(name = "Rooms")
+public class Room extends Model implements Parcelable {
     public static final String TAG = "room";
+
+    @Column(name = "floor")
     public String floor;
+
+    @Column(name = "room_id")
     public String id;
+
+    @Column(name = "room_name")
     public String name;
+
+    @Column(name = "resource_id")
     public String googleResourceId;
+
     // initially booked for all eternity
-    public List<TimePeriod> booked = Arrays.asList(new TimePeriod()
+    @Column(name = "room_bookings")
+    public TimePeriod[] booked = new TimePeriod[]{new TimePeriod()
                                                         .setStart(new DateTime(0))
-                                                        .setEnd(new DateTime(Long.MAX_VALUE)));
-    public DateTime lastUpdated;
+                                                        .setEnd(new DateTime(Long.MAX_VALUE))};
+
+    // work around to let us persist bookings
+    @Column(name = "bookings")
+    private String[] bookedString;
 
     /**
      * Checks if the room is busy in the half hour after time
@@ -48,7 +63,7 @@ public class Room implements Parcelable{
 
     @Override
     public String toString() {
-        return name + " floor:" + floor + " booked:" + booked.toString();
+        return name + " floor:" + floor + " booked:" + Arrays.toString(booked);
     }
 
     @Override
@@ -63,14 +78,13 @@ public class Room implements Parcelable{
         dest.writeString(this.name);
         dest.writeString(this.googleResourceId);
         // store the number of start, end longs we are saving
-        dest.writeInt(booked.size());
+        dest.writeInt(booked.length);
         for (TimePeriod t : booked ) {
             long start = t.getStart().getValue();
             long end = t.getEnd().getValue();
             dest.writeLong(start);
             dest.writeLong(end);
         }
-        dest.writeSerializable(this.lastUpdated);
     }
 
     public Room() {
@@ -83,13 +97,12 @@ public class Room implements Parcelable{
         this.googleResourceId = in.readString();
         // put back all the TimePeriods into the booked list
         int count = in.readInt();
-        this.booked = new ArrayList<TimePeriod>();
+        this.booked = new TimePeriod[count];
         for (int i = 0; i < count; i++) {
             long start = in.readLong();
             long end = in.readLong();
-            booked.add(new TimePeriod().setStart(new DateTime(start)).setEnd(new DateTime(end)));
+            booked[i] = new TimePeriod().setStart(new DateTime(start)).setEnd(new DateTime(end));
         }
-        this.lastUpdated = (DateTime) in.readSerializable();
     }
 
     public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {

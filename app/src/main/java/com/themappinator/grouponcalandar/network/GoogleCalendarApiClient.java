@@ -20,6 +20,7 @@ import com.google.api.services.calendar.model.FreeBusyCalendar;
 import com.google.api.services.calendar.model.FreeBusyRequest;
 import com.google.api.services.calendar.model.FreeBusyRequestItem;
 import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.google.api.services.calendar.model.TimePeriod;
 import com.themappinator.grouponcalandar.model.Room;
 
 import java.io.IOException;
@@ -116,7 +117,8 @@ public class GoogleCalendarApiClient {
                         Log.e("GCAPI", room.name + ":" + calendar.getErrors().toString());
                         continue;
                     }
-                    room.booked = calendar.getBusy();
+                    List<TimePeriod> bookings = calendar.getBusy();
+                    room.booked = bookings.toArray(new TimePeriod[bookings.size()]);
                 }
             }
             i += REQUEST_SIZE;

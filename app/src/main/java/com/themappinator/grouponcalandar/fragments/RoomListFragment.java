@@ -63,13 +63,16 @@ public abstract class RoomListFragment extends Fragment {
             for (String floor : floors) {
                 String[] roomIds = getResources().getStringArray(getResources().getIdentifier(floor, "array", getActivity().getApplicationInfo().packageName));
                 for (String roomId : roomIds) {
-                    String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
-                    String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
-                    Room room = new Room();
-                    room.floor = floor;
-                    room.id = roomId;
-                    room.name = name;
-                    room.googleResourceId = googleResource;
+                    Room room = Room.findRoomById(roomId);
+                    if (room == null) {
+                        String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
+                        String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
+                        room = new Room();
+                        room.floor = floor;
+                        room.roomid = roomId;
+                        room.name = name;
+                        room.googleResourceId = googleResource;
+                    }
                     rooms.add(room);
                 }
             }

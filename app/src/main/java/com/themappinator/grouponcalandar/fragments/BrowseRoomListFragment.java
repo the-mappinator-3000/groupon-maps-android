@@ -55,7 +55,7 @@ public class BrowseRoomListFragment extends RoomListFragment {
                     String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
                     Room room = new Room();
                     room.floor = floor;
-                    room.id = roomId;
+                    room.roomid = roomId;
                     room.name = name;
                     room.googleResourceId = googleResource;
                     rooms.add(room);

@@ -127,7 +127,7 @@ public class MapImageView extends ImageView {
         try {
             Method getTargetByNameMethod = vectorDrawable.getClass().getDeclaredMethod("getTargetByName", String.class);
             getTargetByNameMethod.setAccessible(true);
-            Object vPathObject = getTargetByNameMethod.invoke(vectorDrawable, room.id);
+            Object vPathObject = getTargetByNameMethod.invoke(vectorDrawable, room.roomid);
             if (vPathObject != null) {
                 Method toPathMethod = vPathObject.getClass().getMethod("toPath", Path.class);
                 toPathMethod.setAccessible(true);

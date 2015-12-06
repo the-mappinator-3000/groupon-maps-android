@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
@@ -22,24 +23,20 @@ public class Room extends Model implements Parcelable {
     @Column(name = "floor")
     public String floor;
 
-    @Column(name = "room_id")
-    public String id;
+    @Column(name = "roomid")
+    public String roomid;
 
-    @Column(name = "room_name")
+    @Column(name = "roomname")
     public String name;
 
-    @Column(name = "resource_id")
+    @Column(name = "resourceid")
     public String googleResourceId;
 
     // initially booked for all eternity
-    @Column(name = "room_bookings")
+    @Column(name = "roombookings")
     public TimePeriod[] booked = new TimePeriod[]{new TimePeriod()
                                                         .setStart(new DateTime(0))
                                                         .setEnd(new DateTime(Long.MAX_VALUE))};
-
-    // work around to let us persist bookings
-    @Column(name = "bookings")
-    private String[] bookedString;
 
     /**
      * Checks if the room is busy in the half hour after time
@@ -74,7 +71,7 @@ public class Room extends Model implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.floor);
-        dest.writeString(this.id);
+        dest.writeString(this.roomid);
         dest.writeString(this.name);
         dest.writeString(this.googleResourceId);
         // store the number of start, end longs we are saving
@@ -92,7 +89,7 @@ public class Room extends Model implements Parcelable {
 
     protected Room(Parcel in) {
         this.floor = in.readString();
-        this.id = in.readString();
+        this.roomid = in.readString();
         this.name = in.readString();
         this.googleResourceId = in.readString();
         // put back all the TimePeriods into the booked list
@@ -114,4 +111,8 @@ public class Room extends Model implements Parcelable {
             return new Room[size];
         }
     };
+
+    public static Room findRoomById(String roomid) {
+        return new Select().from(Room.class).where("roomid = ?",roomid).executeSingle();
+    }
 }

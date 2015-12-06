@@ -197,6 +197,10 @@ public class BookRoomListFragment extends RoomListFragment {
                 Log.d("request task", "No results returned.");
             } else {
                 aRooms.notifyDataSetChanged();
+                // save to database
+                for (Room room : rooms) {
+                    room.save();
+                }
             }
         }
 

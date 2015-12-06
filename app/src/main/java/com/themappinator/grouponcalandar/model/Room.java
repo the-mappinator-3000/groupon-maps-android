@@ -3,28 +3,40 @@ package com.themappinator.grouponcalandar.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Represents a room in the palo alto offices
  */
-public class Room implements Parcelable {
+@Table(name = "Rooms")
+public class Room extends Model implements Parcelable {
     public static final String TAG = "room";
+
+    @Column(name = "floor")
     public String floor;
-    public String id;
+
+    @Column(name = "roomid")
+    public String roomid;
+
+    @Column(name = "roomname")
     public String name;
+
+    @Column(name = "resourceid")
     public String googleResourceId;
+
     // initially booked for all eternity
-    public List<TimePeriod> booked = Arrays.asList(new TimePeriod()
+    @Column(name = "roombookings")
+    public TimePeriod[] booked = new TimePeriod[]{new TimePeriod()
                                                         .setStart(new DateTime(0))
-                                                        .setEnd(new DateTime(Long.MAX_VALUE)));
-    public DateTime lastUpdated;
+                                                        .setEnd(new DateTime(Long.MAX_VALUE))};
 
     /**
      * Checks if the room is busy in the half hour after time
@@ -48,7 +60,7 @@ public class Room implements Parcelable {
 
     @Override
     public String toString() {
-        return name + " floor:" + floor + " booked:" + booked.toString();
+        return name + " floor:" + floor + " booked:" + Arrays.toString(booked);
     }
 
     @Override
@@ -59,14 +71,17 @@ public class Room implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.floor);
-        dest.writeString(this.id);
+        dest.writeString(this.roomid);
         dest.writeString(this.name);
         dest.writeString(this.googleResourceId);
-        // TODO: Figure out why I have a crash caused by:
-        // TODO: java.lang.RuntimeException: Parcelable encountered ClassNotFoundException reading a Serializable object (name = com.google.api.client.util.DateTime)
-        // TODO:                         (AvY)
-//        dest.writeList(this.booked);
-        dest.writeSerializable(this.lastUpdated);
+        // store the number of start, end longs we are saving
+        dest.writeInt(booked.length);
+        for (TimePeriod t : booked ) {
+            long start = t.getStart().getValue();
+            long end = t.getEnd().getValue();
+            dest.writeLong(start);
+            dest.writeLong(end);
+        }
     }
 
     public Room() {
@@ -74,12 +89,17 @@ public class Room implements Parcelable {
 
     protected Room(Parcel in) {
         this.floor = in.readString();
-        this.id = in.readString();
+        this.roomid = in.readString();
         this.name = in.readString();
         this.googleResourceId = in.readString();
-        this.booked = new ArrayList<TimePeriod>();
-        in.readList(this.booked, List.class.getClassLoader());
-        this.lastUpdated = (DateTime) in.readSerializable();
+        // put back all the TimePeriods into the booked list
+        int count = in.readInt();
+        this.booked = new TimePeriod[count];
+        for (int i = 0; i < count; i++) {
+            long start = in.readLong();
+            long end = in.readLong();
+            booked[i] = new TimePeriod().setStart(new DateTime(start)).setEnd(new DateTime(end));
+        }
     }
 
     public static final Parcelable.Creator<Room> CREATOR = new Parcelable.Creator<Room>() {
@@ -91,4 +111,8 @@ public class Room implements Parcelable {
             return new Room[size];
         }
     };
+
+    public static Room findRoomById(String roomid) {
+        return new Select().from(Room.class).where("roomid = ?",roomid).executeSingle();
+    }
 }

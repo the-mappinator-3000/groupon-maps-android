@@ -2,12 +2,12 @@ package com.themappinator.grouponcalandar.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.themappinator.grouponcalandar.R;
-import com.themappinator.grouponcalandar.activities.BookEventActivity;
 import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.adapters.RoomListType;
 import com.themappinator.grouponcalandar.model.Room;
@@ -78,12 +77,9 @@ public class BookRoomListFragment extends RoomListFragment {
             @Override
             public void onRoomClick(int position) {
                 Room room = rooms.get(position);
-                Context context = getContext();
-                Intent i = new Intent(context, BookEventActivity.class);
-                // prevent back returning to try and book the room again
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                i.putExtra(Room.TAG, room);
-                context.startActivity(i);
+                FragmentManager fragmentManager = getFragmentManager();
+                BookEventDialog dialog = BookEventDialog.newInstance(room);
+                dialog.show(fragmentManager, "book_dialog");
             }
         };
     }
@@ -243,6 +239,10 @@ public class BookRoomListFragment extends RoomListFragment {
                 Log.d("request task", "No results returned.");
             } else {
                 aRooms.notifyDataSetChanged();
+                // save to database
+                for (Room room : rooms) {
+                    room.save();
+                }
             }
         }
 

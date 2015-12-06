@@ -47,16 +47,6 @@ public class RoomListActivity extends AppCompatActivity {
         GooglePlayServicesManager.instance().setActivity(this);
     }
 
-
-    /**
-     * Called whenever this activity is pushed to the foreground, such as after
-     * a call to onCreate().
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     /**
      * Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,

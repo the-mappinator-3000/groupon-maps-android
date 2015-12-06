@@ -29,6 +29,8 @@ public class RoomListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        setTitle(getString(R.string.room_list_activity_title));
+
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         client = GoogleCalendarApiClient.getInstance(getApplicationContext(),

@@ -13,15 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.activities.BookEventActivity;
 import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.adapters.RoomListType;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
+import com.themappinator.grouponcalandar.ui.MainUITraits;
 import com.themappinator.grouponcalandar.utils.GooglePlayServicesManager;
 
+import org.florescu.android.rangeseekbar.RangeSeekBar;
+
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +46,9 @@ public class BookRoomListFragment extends RoomListFragment {
     private GoogleCalendarApiClient client;
 
     private RefreshMode refreshMode = RefreshMode.None;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     public static BookRoomListFragment newInstance() {
         Bundle args = new Bundle();
@@ -78,6 +88,11 @@ public class BookRoomListFragment extends RoomListFragment {
         };
     }
 
+    @Override
+    protected int getFragmentResourceId() {
+        return R.layout.fragment_book_room_list;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +101,7 @@ public class BookRoomListFragment extends RoomListFragment {
         //
         // Swipe to refresh
         //
+        swipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -104,6 +120,36 @@ public class BookRoomListFragment extends RoomListFragment {
         if (savedInstanceState == null) {
             refreshResultsInMode(RefreshMode.Progress);
         }
+
+        //
+        // Range slider
+        //
+
+        long now = System.currentTimeMillis();
+        Date minDate = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(minDate);
+        calendar.add(Calendar.HOUR, 8);
+        Date maxDate = calendar.getTime();
+
+        calendar.setTime(minDate);
+        calendar.add(Calendar.MINUTE, 45);
+        Date selectedMaxDate = calendar.getTime();
+
+        // Setup the new range seek bar
+        RangeSeekBar<Long> rangeSeekBar = new RangeSeekBar<Long>(getContext());
+        // Set the range
+        rangeSeekBar.setRangeValues(minDate.getTime(), maxDate.getTime());
+        rangeSeekBar.setTextAboveThumbsColor(MainUITraits.MAIN_THEME_COLOR);
+
+        rangeSeekBar.setSelectedMinValue(minDate.getTime());
+        rangeSeekBar.setSelectedMaxValue(selectedMaxDate.getTime());
+
+        // Add to layout
+        LinearLayout layout = (LinearLayout) parentView.findViewById(R.id.range_slider_placeholder);
+        layout.addView(rangeSeekBar);
+
 
         return parentView;
     }

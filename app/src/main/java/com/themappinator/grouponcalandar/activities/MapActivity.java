@@ -24,6 +24,8 @@ public class MapActivity extends AppCompatActivity {
         Intent intent = getIntent();
         selectedRoom = intent.getParcelableExtra(Room.TAG);
 
+        setTitle(selectedRoom.name);
+
         mapImageView = (MapImageView)findViewById(R.id.mapImageView);
         mapImageView.selectRoom(selectedRoom);
     }

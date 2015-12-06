@@ -2,7 +2,6 @@ package com.themappinator.grouponcalandar.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -25,7 +24,7 @@ import java.util.HashMap;
  */
 public class MapImageView extends ImageView {
 
-    private static final int SELECTED_COLOR = Color.parseColor("#15A5EB");
+    private static final int SELECTED_COLOR = MainUITraits.MAIN_THEME_COLOR;
     private static final HashMap<String, Integer> floorToResourceIdMap = new HashMap<>();
 
     private ArrayList<Room> selectedRooms = new ArrayList<>();

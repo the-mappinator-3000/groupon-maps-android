@@ -3,7 +3,6 @@ package com.themappinator.grouponcalandar.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,8 +28,6 @@ public abstract class RoomListFragment extends Fragment {
     protected RoomListAdapter aRooms;
     protected ArrayList<Room> rooms;
 
-    protected SwipeRefreshLayout swipeRefreshLayout;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,17 +35,13 @@ public abstract class RoomListFragment extends Fragment {
         //
         // Rooms list
         //
-        View parentView = inflater.inflate(R.layout.fragment_room_list, container, false);
+        View parentView = inflater.inflate(getFragmentResourceId(), container, false);
         rvRooms = (RecyclerView) parentView.findViewById(R.id.rvRooms);
         rvRooms.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         aRooms = new RoomListAdapter(getActivity(), rooms, getType());
         aRooms.setRoomClickListener(getRoomClickListener());
         rvRooms.setAdapter(aRooms);
 
-        //
-        // Swipe to refresh
-        //
-        swipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById(R.id.swipeContainer);
         return parentView;
     }
 
@@ -76,4 +69,6 @@ public abstract class RoomListFragment extends Fragment {
     protected abstract RoomListType getType();
 
     protected abstract RoomListAdapter.RoomClickListener getRoomClickListener();
+
+    protected abstract int getFragmentResourceId();
 }

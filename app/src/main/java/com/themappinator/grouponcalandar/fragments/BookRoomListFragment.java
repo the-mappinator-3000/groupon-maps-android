@@ -118,6 +118,9 @@ public class BookRoomListFragment extends RoomListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View parentView = super.onCreateView(inflater, container, savedInstanceState);
 
+        // Update room's adapter with start and end dates
+        aRooms.setTimePeriod(startDate, endDate);
+
         //
         // Swipe to refresh
         //
@@ -186,6 +189,9 @@ public class BookRoomListFragment extends RoomListFragment {
         calendar.add(Calendar.MINUTE, MEETING_TIME_IN_MINUTES);
         endDate = calendar.getTime();
 
+        if (aRooms != null) {
+            aRooms.setTimePeriod(startDate, endDate);
+        }
     }
 
     private void updateTimeTextView() {

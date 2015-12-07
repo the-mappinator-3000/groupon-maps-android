@@ -37,7 +37,6 @@ public class BrowseRoomListFragment extends RoomListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View parentView = super.onCreateView(inflater, container, savedInstanceState);
-        swipeRefreshLayout.setEnabled(false);
         return parentView;
     }
 
@@ -89,5 +88,10 @@ public class BrowseRoomListFragment extends RoomListFragment {
                 context.startActivity(intent);
             }
         };
+    }
+
+    @Override
+    protected int getFragmentResourceId() {
+        return R.layout.fragment_browse_room_list;
     }
 }

@@ -13,20 +13,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.adapters.RoomListType;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
+import com.themappinator.grouponcalandar.utils.CalendarUtils;
 import com.themappinator.grouponcalandar.utils.GooglePlayServicesManager;
 
+import org.florescu.android.rangeseekbar.RangeSeekBar;
+
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by ayegorov on 12/4/15.
  */
 public class BookRoomListFragment extends RoomListFragment {
+
+    private static final int MEETING_TIME_IN_MINUTES = 45;
+    private static final int TIME_PERIOD_INTERVAL_IN_HOURS = 8;
+    private static final String START_DATE = "startDate";
+    private static final String END_DATE = "endDate";
 
     enum RefreshMode {
         None,
@@ -38,6 +51,13 @@ public class BookRoomListFragment extends RoomListFragment {
     private GoogleCalendarApiClient client;
 
     private RefreshMode refreshMode = RefreshMode.None;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView timeTextView;
+
+    private Date startDate;
+    private Date endDate;
+
 
     public static BookRoomListFragment newInstance() {
         Bundle args = new Bundle();
@@ -54,6 +74,20 @@ public class BookRoomListFragment extends RoomListFragment {
         mProgress = new ProgressDialog(getActivity());
 
         client = GoogleCalendarApiClient.getInstance();
+
+        if (savedInstanceState == null) {
+            updateTimeIntervalWithStartTime(System.currentTimeMillis());
+        } else {
+            startDate = (Date) savedInstanceState.getSerializable(START_DATE);
+            endDate = (Date) savedInstanceState.getSerializable(END_DATE);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(START_DATE, startDate);
+        outState.putSerializable(END_DATE, endDate);
     }
 
     @Override
@@ -68,10 +102,15 @@ public class BookRoomListFragment extends RoomListFragment {
             public void onRoomClick(int position) {
                 Room room = rooms.get(position);
                 FragmentManager fragmentManager = getFragmentManager();
-                BookEventDialog dialog = BookEventDialog.newInstance(room);
+                BookEventDialog dialog = BookEventDialog.newInstance(room, startDate, endDate);
                 dialog.show(fragmentManager, "book_dialog");
             }
         };
+    }
+
+    @Override
+    protected int getFragmentResourceId() {
+        return R.layout.fragment_book_room_list;
     }
 
     @Nullable
@@ -82,6 +121,7 @@ public class BookRoomListFragment extends RoomListFragment {
         //
         // Swipe to refresh
         //
+        swipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -101,7 +141,59 @@ public class BookRoomListFragment extends RoomListFragment {
             refreshResultsInMode(RefreshMode.Progress);
         }
 
+        //
+        // Range slider
+        //
+
+        Date minDate = startDate;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(minDate);
+        calendar.add(Calendar.HOUR, TIME_PERIOD_INTERVAL_IN_HOURS);
+        Date maxDate = calendar.getTime();
+
+
+        // Setup the new range seek bar
+        RangeSeekBar<Long> rangeSeekBar = (RangeSeekBar<Long>)parentView.findViewById(R.id.timeSeekBar);
+        // Set the range
+        rangeSeekBar.setRangeValues(minDate.getTime(), maxDate.getTime());
+        rangeSeekBar.setNotifyWhileDragging(true);
+
+        rangeSeekBar.setSelectedMaxValue(startDate.getTime());
+
+        timeTextView = (TextView)parentView.findViewById(R.id.timeTextView);
+
+        updateTimeTextView();
+
+        rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Long>() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
+                updateTimeIntervalWithStartTime(maxValue);
+                updateTimeTextView();
+            }
+        });
+
+
         return parentView;
+    }
+
+    private void updateTimeIntervalWithStartTime(Long startTime) {
+        startDate = new Date(startTime);
+        startDate = CalendarUtils.trimSeconds(startDate);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.MINUTE, MEETING_TIME_IN_MINUTES);
+        endDate = calendar.getTime();
+
+    }
+
+    private void updateTimeTextView() {
+        String dateRangeText = DateFormat.getTimeInstance(DateFormat.SHORT).format(startDate);
+        dateRangeText += " - ";
+        dateRangeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(endDate);
+
+        timeTextView.setText(dateRangeText);
     }
 
     /**

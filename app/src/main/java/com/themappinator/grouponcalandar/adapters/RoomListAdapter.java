@@ -2,6 +2,7 @@ package com.themappinator.grouponcalandar.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,13 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         } else {
             holder.tvRoomName.setVisibility(View.GONE);
         }
-        holder.tvRoomName.setText(CalendarUtils.getResourceString(room.floor, context) + " " + room.name);
+        String title = CalendarUtils.getResourceString(room.floor, context) + " " + room.name;
+        if (!room.name.isEmpty()) {
+            holder.tvRoomName.setText(title);
+        } else {
+            Log.e("RLA", "room:" + room.roomid + " is mis- configured");
+            holder.tvRoomName.setVisibility(View.GONE);
+        }
     }
 
     @Override

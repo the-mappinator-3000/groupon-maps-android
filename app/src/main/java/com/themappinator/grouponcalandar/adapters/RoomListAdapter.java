@@ -2,6 +2,7 @@ package com.themappinator.grouponcalandar.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         }
         String title = CalendarUtils.getResourceString(room.floor, context) + " " + room.name;
         assert(!room.name.isEmpty());
+        if (room.name.isEmpty()) {
+            Log.e("Debug", "room with id '" + room.roomid + "' is empty");
+        }
 
         holder.tvRoomName.setText(title);
     }

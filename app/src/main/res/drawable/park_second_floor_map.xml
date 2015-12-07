@@ -30,8 +30,9 @@
         android:fillColor="#e6e7e8"
         android:fillAlpha="0.6" />
     <path
+        android:name="pa4_2_shapes_and_colors"
         android:pathData="M787.59998 638.59998l117 0 0 125.5 -117 0z"
-        android:fillColor="#e6e7e8"
+        android:fillColor="#a7a9ab"
         android:fillAlpha="0.6" />
     <path
         android:pathData="M904.5 59.3l0 242 -530.6 0 0 -242 530.6 0zm-141.3 529.5l141.3 0 0 -287.5 -141.3 0 0 287.5z"

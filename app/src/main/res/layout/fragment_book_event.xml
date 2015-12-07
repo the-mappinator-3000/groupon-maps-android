@@ -6,6 +6,7 @@
     tools:context="com.themappinator.grouponcalandar.activities.BookEventActivity">
 
     <EditText
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/booking_summary"
@@ -17,6 +18,9 @@
         android:layout_alignParentEnd="true" />
 
     <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
@@ -35,7 +39,8 @@
         android:id="@+id/btnBook"
         android:layout_below="@id/etDetails"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        />
 
     <Button
         android:layout_width="wrap_content"

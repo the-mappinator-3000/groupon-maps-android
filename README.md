@@ -4,31 +4,18 @@
 
 Show maps of all Groupon meeting rooms. You can see the schedules for them and you can make your own reservations.
 
-* [ ] When the app first starts user sees a login screen (Google Login Screen)
-* [ ] Save auth token to preferences
-* [ ] User sees a list of available rooms for the next 30 minutes
-* [ ] User can click on one of those. User is taken to “room details”
-* [ ] User can see availability, time slider, reserve button
-* [ ] User pushes the reserve button and see a “create event” dialog
-* [ ] On the dialog we’ll have: title, description, time slider, ok and cancel buttons
+* [x] When the app first starts user sees a login screen (Google Login Screen)
+* [x] Save auth token to preferences
+* [x] User sees a list of available rooms for the next hour 
+* [x] User can click on one of those to book it
+* [x] After booking user is shown a "Map View" which displays the location of the room on a map
+* [x] user may use the map view directly by going to the browse tab in which all the rooms are present
+	- clicking a room takes the user to the map for that room
 
-## Requirements
-App Must:
-* [X] have a repo on github
-* [X] have user stories
-* [X] have wireframes (see wireframing tools...)
-* [ ] be functionally complete
-* [ ] Must have at least three separate "activities" or screens supporting user interaction
-* [ ] Must be data-driven with dynamic information or media being displayed
-* [ ] Must use a RESTful API to source the data that is populated into the application
-* [ ] Must use local persistence either through files, preferences or SQLite
+![Video Walkthrough](groupon-map-demo.gif)
 
-MVP:
-* [ ] Fetch list of meeting rooms via GCAPI
-* [ ] Show availability for each room
-* [ ] Provide booking functionality
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-Expanded App:
 * [ ] Maps View
 * [ ] 3d is even better
 * [ ] Beacons
@@ -36,5 +23,3 @@ Expanded App:
 * [ ] Take into account when participants are free (find the best time for everyone)
 * [ ] Show what meeting is on so that it can be determined if the meeting can be cancelled
 
-Wireframes:
-![alt tag](wireframes/IMG_0102.JPG)

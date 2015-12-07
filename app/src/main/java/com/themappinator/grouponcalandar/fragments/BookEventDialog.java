@@ -20,6 +20,8 @@ import com.themappinator.grouponcalandar.activities.MapActivity;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
+import java.util.Date;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -27,6 +29,10 @@ import butterknife.ButterKnife;
  * Created by lsilberstein on 12/6/15.
  */
 public class BookEventDialog extends DialogFragment {
+
+    private static final String START_DATE = "startDate";
+    private static final String END_DATE = "endDate";
+
     private Room selectedRoom;
     private GoogleCalendarApiClient client;
     private ProgressDialog mProgress;
@@ -37,16 +43,21 @@ public class BookEventDialog extends DialogFragment {
     @Bind(R.id.btnBook) Button btnBook;
     @Bind(R.id.btnCancel) Button btnCancel;
 
+    private Date startDate;
+    private Date endDate;
+
     public BookEventDialog() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static BookEventDialog newInstance(Room room) {
+    public static BookEventDialog newInstance(Room room, Date startDate, Date endDate) {
         BookEventDialog frag = new BookEventDialog();
         Bundle args = new Bundle();
         args.putParcelable(Room.TAG, room);
+        args.putSerializable(START_DATE, startDate);
+        args.putSerializable(END_DATE, endDate);
         frag.setArguments(args);
         return frag;
     }
@@ -58,6 +69,8 @@ public class BookEventDialog extends DialogFragment {
         ButterKnife.bind(this, view);
         Bundle args = getArguments();
         selectedRoom = args.getParcelable(Room.TAG);
+        startDate = (Date) args.getSerializable(START_DATE);
+        endDate = (Date) args.getSerializable(END_DATE);
         client = GoogleCalendarApiClient.getInstance();
         mProgress = new ProgressDialog(getContext());
 
@@ -138,10 +151,9 @@ public class BookEventDialog extends DialogFragment {
         @Override
         protected Void doInBackground(Room... params) {
             try {
-                long now = System.currentTimeMillis();
                 client.createEventAt(params[0],
-                        new DateTime(now),
-                        new DateTime(now + GoogleCalendarApiClient.THREE_QUATER_HOUR_MILLIES),
+                        new DateTime(startDate),
+                        new DateTime(endDate),
                         summaryText,
                         detailsText);
             } catch (Exception e) {

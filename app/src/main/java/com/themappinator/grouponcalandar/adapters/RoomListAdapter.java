@@ -2,7 +2,6 @@ package com.themappinator.grouponcalandar.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,8 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     private Context context;
     private final RoomListType roomListType;
     private static Map<RoomListType, RoomClickListener> listenerByType = new HashMap<>();
+    private Date startDate;
+    private Date endDate;
 
     public interface RoomClickListener {
         void onRoomClick(int position);
@@ -41,6 +43,13 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         listenerByType.put(roomListType, listener);
     }
 
+    public void setTimePeriod(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -57,19 +66,26 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Room room = rooms.get(position);
+
         // only check for busy if it is not a browse context
-        if (roomListType == RoomListType.Browse || !room.isBusy(new DateTime(System.currentTimeMillis()))) {
+        DateTime startTime = null;
+        if (startDate != null) {
+            startTime = new DateTime(startDate);
+        }
+        DateTime endTime = null;
+        if (endDate != null) {
+            endTime = new DateTime(endDate);
+        }
+
+        if (roomListType == RoomListType.Browse || !room.isBusy(startTime, endTime)) {
             holder.tvRoomName.setVisibility(View.VISIBLE);
         } else {
             holder.tvRoomName.setVisibility(View.GONE);
         }
         String title = CalendarUtils.getResourceString(room.floor, context) + " " + room.name;
-        if (!room.name.isEmpty()) {
-            holder.tvRoomName.setText(title);
-        } else {
-            Log.e("RLA", "room:" + room.roomid + " is mis- configured");
-            holder.tvRoomName.setVisibility(View.GONE);
-        }
+        assert(!room.name.isEmpty());
+
+        holder.tvRoomName.setText(title);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
-import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
 import java.util.Arrays;
 
@@ -40,18 +39,23 @@ public class Room extends Model implements Parcelable {
 
     /**
      * Checks if the room is busy in the half hour after time
-     * @param time the start of the free/busy period
+     * @param startTime the start of the free/busy period
+     * @param endTime the end of the free/busy period
      * @return true if the room is booked
      */
-    public boolean isBusy(DateTime time) {
-        long nowStart = time.getValue();
-        long nowEnd = nowStart + GoogleCalendarApiClient.ONE_HOUR_MILLIES;
+    public boolean isBusy(DateTime startTime, DateTime endTime) {
+        long startTimeValue = startTime.getValue();
+        long endTimeValue = endTime.getValue();
         for (TimePeriod period : booked) {
             long start = period.getStart().getValue();
             long end = period.getEnd().getValue();
-            if ((start < nowStart && nowStart < end) || // booking overlaps start of hour
-                    (start < nowEnd || end < nowEnd) || // booking overlaps end of hour
-                    (nowStart < start && end < nowEnd)) { // booking within the hour
+//            if ((start < startTimeValue && startTimeValue < end) || // booking overlaps start of hour
+//                    (start < endTimeValue || end < endTimeValue) || // booking overlaps end of hour
+//                    (startTimeValue < start && end < endTimeValue)) { // booking within the hour
+//                return true;
+            // Note: I think this one is the correct one!
+            // basically it says IF NOT (end <= startTimeValue || endTimeValue <= start)
+            if (end > startTimeValue && endTimeValue > start) {
                 return true;
             }
         }

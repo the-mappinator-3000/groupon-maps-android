@@ -39,6 +39,7 @@ public abstract class RoomListFragment extends Fragment {
         View parentView = inflater.inflate(getFragmentResourceId(), container, false);
         rvRooms = (RecyclerView) parentView.findViewById(R.id.rvRooms);
         rvRooms.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//        rvRooms.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         aRooms = new RoomListAdapter(getActivity(), rooms, getType());
         aRooms.setRoomClickListener(getRoomClickListener());
         rvRooms.setAdapter(aRooms);

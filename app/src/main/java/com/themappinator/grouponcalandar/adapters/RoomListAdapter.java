@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.model.Room;
-import com.themappinator.grouponcalandar.utils.CalendarUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -83,7 +82,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         } else {
             holder.tvRoomName.setVisibility(View.GONE);
         }
-        String title = CalendarUtils.getResourceString(room.floor, context) + " " + room.name;
+        String title = room.name;
         assert(!room.name.isEmpty());
         if (room.name.isEmpty()) {
             Log.e("Debug", "room with id '" + room.roomid + "' is empty");

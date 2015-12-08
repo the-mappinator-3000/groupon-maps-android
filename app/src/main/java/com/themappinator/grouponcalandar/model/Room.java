@@ -49,11 +49,6 @@ public class Room extends Model implements Parcelable {
         for (TimePeriod period : booked) {
             long start = period.getStart().getValue();
             long end = period.getEnd().getValue();
-//            if ((start < startTimeValue && startTimeValue < end) || // booking overlaps start of hour
-//                    (start < endTimeValue || end < endTimeValue) || // booking overlaps end of hour
-//                    (startTimeValue < start && end < endTimeValue)) { // booking within the hour
-//                return true;
-            // Note: I think this one is the correct one!
             // basically it says IF NOT (end <= startTimeValue || endTimeValue <= start)
             if (end > startTimeValue && endTimeValue > start) {
                 return true;

@@ -77,6 +77,7 @@ public class BookEventDialog extends DialogFragment {
         endDate = (Date) args.getSerializable(END_DATE);
         client = GoogleCalendarApiClient.getInstance();
         mProgress = new ProgressDialog(getContext());
+        mProgress.setMessage(getResources().getString(R.string.loading_message));
 
         getDialog().setTitle(selectedRoom.name);
 

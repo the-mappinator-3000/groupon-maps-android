@@ -107,7 +107,7 @@ public class BookRoomListFragment extends RoomListFragment {
         return new RoomListAdapter.RoomClickListener() {
             @Override
             public void onRoomClick(int position) {
-                Room room = rooms.get(position);
+                Room room = rooms.get(mSectionedAdapter.sectionedPositionToPosition(position));
                 FragmentManager fragmentManager = getFragmentManager();
                 BookEventDialog dialog = BookEventDialog.newInstance(room, startDate, endDate);
                 dialog.show(fragmentManager, "book_dialog");

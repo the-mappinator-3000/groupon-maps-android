@@ -18,10 +18,12 @@ import android.widget.TextView;
 import com.themappinator.grouponcalandar.R;
 import com.themappinator.grouponcalandar.adapters.RoomListAdapter;
 import com.themappinator.grouponcalandar.adapters.RoomListType;
+import com.themappinator.grouponcalandar.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 import com.themappinator.grouponcalandar.utils.CalendarUtils;
 import com.themappinator.grouponcalandar.utils.GooglePlayServicesManager;
+import com.themappinator.grouponcalandar.utils.RoomSectionPresenter;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
@@ -57,6 +59,9 @@ public class BookRoomListFragment extends RoomListFragment {
 
     private Date startDate;
     private Date endDate;
+
+    private SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
+    private RoomSectionPresenter roomSectionPresenter;
 
 
     public static BookRoomListFragment newInstance() {
@@ -120,6 +125,22 @@ public class BookRoomListFragment extends RoomListFragment {
 
         // Update room's adapter with start and end dates
         aRooms.setTimePeriod(startDate, endDate);
+
+        //
+        // Define sections
+        //
+
+        roomSectionPresenter = new RoomSectionPresenter(getContext(), rooms);
+
+        // Add your adapter to the sectionAdapter
+        mSectionedAdapter = new
+                SimpleSectionedRecyclerViewAdapter(getContext(), R.layout.floor_section, R.id.section_text, aRooms);
+
+        updateSections();
+
+        // Apply this adapter to the RecyclerView
+        rvRooms.setAdapter(mSectionedAdapter);
+
 
         //
         // Swipe to refresh
@@ -192,6 +213,12 @@ public class BookRoomListFragment extends RoomListFragment {
         if (aRooms != null) {
             aRooms.setTimePeriod(startDate, endDate);
         }
+    }
+
+    private void updateSections() {
+        List<SimpleSectionedRecyclerViewAdapter.Section> sections = roomSectionPresenter.getSections();
+        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+        mSectionedAdapter.setSections(sections.toArray(dummy));
     }
 
     private void updateTimeTextView() {

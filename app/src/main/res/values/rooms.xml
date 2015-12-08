@@ -7,6 +7,13 @@
         <item>pa5_1</item>
     </string-array>
 
+    <string-array name="floors_pretty">
+        <item>Park - 1st floor</item>
+        <item>Park - 2nd floor</item>
+        <item>Park - 3rd floor</item>
+        <item>Portage</item>
+    </string-array>
+
     <string name="pa4_1">PA4-1</string>
     <string-array name="pa4_1">
         <item>pa4_1_running_with_scissors</item>

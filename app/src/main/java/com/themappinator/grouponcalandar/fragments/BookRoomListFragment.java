@@ -72,6 +72,8 @@ public class BookRoomListFragment extends RoomListFragment {
         super.onCreate(savedInstanceState);
 
         mProgress = new ProgressDialog(getActivity());
+        //mProgress.setTitle(getResources().getString(R.string.loading_title));
+        mProgress.setMessage(getResources().getString(R.string.loading_message));
 
         client = GoogleCalendarApiClient.getInstance();
 

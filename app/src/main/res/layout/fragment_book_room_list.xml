@@ -9,10 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_above="@+id/timeTextView">
+        android:layout_above="@+id/rlTimeBar">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -20,30 +19,42 @@
             android:id="@+id/rvRooms"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <org.florescu.android.rangeseekbar.RangeSeekBar
-        android:id="@+id/timeSeekBar"
-        rsb:valuesAboveThumbs="false"
-        rsb:singleThumb="true"
-        rsb:showLabels="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/rlTimeBar"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp" />
+        android:elevation="50dp"
+        android:outlineProvider="bounds"
+        android:background="#FFF">
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/timeSeekBar"
+            rsb:valuesAboveThumbs="false"
+            rsb:singleThumb="true"
+            rsb:showLabels="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timeTextView"
-        android:layout_above="@+id/timeSeekBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:hint="@string/time_text_view_hint"
-        android:focusable="false"
-        android:layout_marginBottom="10dp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeTextView"
+            android:layout_above="@+id/timeSeekBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:hint="@string/time_text_view_hint"
+            android:focusable="false"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
 
     <!--<LinearLayout-->
         <!--android:orientation="vertical"-->

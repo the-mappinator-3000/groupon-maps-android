@@ -32,7 +32,7 @@
         <org.florescu.android.rangeseekbar.RangeSeekBar
             android:id="@+id/timeSeekBar"
             rsb:valuesAboveThumbs="false"
-            rsb:singleThumb="true"
+            rsb:singleThumb="false"
             rsb:showLabels="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

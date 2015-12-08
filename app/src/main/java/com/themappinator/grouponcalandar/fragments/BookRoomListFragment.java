@@ -56,12 +56,15 @@ public class BookRoomListFragment extends RoomListFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView timeTextView;
+    private RangeSeekBar<Long> rangeSeekBar;
 
     private Date startDate;
     private Date endDate;
 
     private SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
     private RoomSectionPresenter roomSectionPresenter;
+
+    private Long previousMinValue; // Save here to check if we dragging the min value
 
 
     public static BookRoomListFragment newInstance() {
@@ -83,7 +86,10 @@ public class BookRoomListFragment extends RoomListFragment {
         client = GoogleCalendarApiClient.getInstance();
 
         if (savedInstanceState == null) {
-            updateTimeIntervalWithStartTime(System.currentTimeMillis());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(System.currentTimeMillis()));
+            calendar.add(Calendar.MINUTE, MEETING_TIME_IN_MINUTES);
+            updateTimeIntervalWithStartTime(System.currentTimeMillis(), calendar.getTime().getTime());
         } else {
             startDate = (Date) savedInstanceState.getSerializable(START_DATE);
             endDate = (Date) savedInstanceState.getSerializable(END_DATE);
@@ -180,21 +186,25 @@ public class BookRoomListFragment extends RoomListFragment {
 
 
         // Setup the new range seek bar
-        RangeSeekBar<Long> rangeSeekBar = (RangeSeekBar<Long>)parentView.findViewById(R.id.timeSeekBar);
+        rangeSeekBar = (RangeSeekBar<Long>)parentView.findViewById(R.id.timeSeekBar);
         // Set the range
         rangeSeekBar.setRangeValues(minDate.getTime(), maxDate.getTime());
         rangeSeekBar.setNotifyWhileDragging(true);
 
-        rangeSeekBar.setSelectedMaxValue(startDate.getTime());
+        rangeSeekBar.setSelectedMinValue(startDate.getTime());
+        rangeSeekBar.setSelectedMaxValue(endDate.getTime());
 
         timeTextView = (TextView)parentView.findViewById(R.id.timeTextView);
 
         updateTimeTextView();
 
+        previousMinValue = rangeSeekBar.getSelectedMinValue();
+
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Long>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
-                updateTimeIntervalWithStartTime(maxValue);
+                adjustMaxValueFor(minValue, maxValue);
+                updateTimeIntervalWithStartTime(minValue, maxValue);
                 updateTimeTextView();
             }
         });
@@ -203,14 +213,20 @@ public class BookRoomListFragment extends RoomListFragment {
         return parentView;
     }
 
-    private void updateTimeIntervalWithStartTime(Long startTime) {
+    private void adjustMaxValueFor(Long minValue, Long maxValue) {
+        Long delta = minValue - previousMinValue;
+
+        if (delta != 0) {
+            rangeSeekBar.setSelectedMaxValue(maxValue + delta);
+        }
+
+        previousMinValue = minValue;
+    }
+
+    private void updateTimeIntervalWithStartTime(Long startTime, Long endTime) {
         startDate = new Date(startTime);
         startDate = CalendarUtils.trimSeconds(startDate);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.MINUTE, MEETING_TIME_IN_MINUTES);
-        endDate = calendar.getTime();
+        endDate = new Date(endTime);
 
         if (aRooms != null) {
             aRooms.setTimePeriod(startDate, endDate);

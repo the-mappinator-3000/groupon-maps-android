@@ -40,6 +40,8 @@ public class BookRoomListFragment extends RoomListFragment {
 
     private static final int MEETING_TIME_IN_MINUTES = 45;
     private static final int TIME_PERIOD_INTERVAL_IN_HOURS = 8;
+    private static final String SELECTED_START_DATE = "selectedStartDate";
+    private static final String SELECTED_END_DATE = "selectedEndDate";
     private static final String START_DATE = "startDate";
     private static final String END_DATE = "endDate";
 
@@ -58,6 +60,8 @@ public class BookRoomListFragment extends RoomListFragment {
     private TextView timeTextView;
     private RangeSeekBar<Long> rangeSeekBar;
 
+    private Date selectedStartDate;
+    private Date selectedEndDate;
     private Date startDate;
     private Date endDate;
 
@@ -90,7 +94,14 @@ public class BookRoomListFragment extends RoomListFragment {
             calendar.setTime(new Date(System.currentTimeMillis()));
             calendar.add(Calendar.MINUTE, MEETING_TIME_IN_MINUTES);
             updateTimeIntervalWithStartTime(System.currentTimeMillis(), calendar.getTime().getTime());
+
+            startDate = selectedStartDate;
+            calendar.setTime(startDate);
+            calendar.add(Calendar.HOUR, TIME_PERIOD_INTERVAL_IN_HOURS);
+            endDate = calendar.getTime();
         } else {
+            selectedStartDate = (Date) savedInstanceState.getSerializable(SELECTED_START_DATE);
+            selectedEndDate = (Date) savedInstanceState.getSerializable(SELECTED_END_DATE);
             startDate = (Date) savedInstanceState.getSerializable(START_DATE);
             endDate = (Date) savedInstanceState.getSerializable(END_DATE);
         }
@@ -99,6 +110,8 @@ public class BookRoomListFragment extends RoomListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable(SELECTED_START_DATE, selectedStartDate);
+        outState.putSerializable(SELECTED_END_DATE, selectedEndDate);
         outState.putSerializable(START_DATE, startDate);
         outState.putSerializable(END_DATE, endDate);
     }
@@ -115,7 +128,7 @@ public class BookRoomListFragment extends RoomListFragment {
             public void onRoomClick(int position) {
                 Room room = rooms.get(mSectionedAdapter.sectionedPositionToPosition(position));
                 FragmentManager fragmentManager = getFragmentManager();
-                BookEventDialog dialog = BookEventDialog.newInstance(room, startDate, endDate);
+                BookEventDialog dialog = BookEventDialog.newInstance(room, selectedStartDate, selectedEndDate);
                 dialog.show(fragmentManager, "book_dialog");
             }
         };
@@ -132,7 +145,7 @@ public class BookRoomListFragment extends RoomListFragment {
         View parentView = super.onCreateView(inflater, container, savedInstanceState);
 
         // Update room's adapter with start and end dates
-        aRooms.setTimePeriod(startDate, endDate);
+        aRooms.setTimePeriod(selectedStartDate, selectedEndDate);
 
         //
         // Define sections
@@ -177,22 +190,14 @@ public class BookRoomListFragment extends RoomListFragment {
         // Range slider
         //
 
-        Date minDate = startDate;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(minDate);
-        calendar.add(Calendar.HOUR, TIME_PERIOD_INTERVAL_IN_HOURS);
-        Date maxDate = calendar.getTime();
-
-
         // Setup the new range seek bar
         rangeSeekBar = (RangeSeekBar<Long>)parentView.findViewById(R.id.timeSeekBar);
         // Set the range
-        rangeSeekBar.setRangeValues(minDate.getTime(), maxDate.getTime());
+        rangeSeekBar.setRangeValues(startDate.getTime(), endDate.getTime());
         rangeSeekBar.setNotifyWhileDragging(true);
 
-        rangeSeekBar.setSelectedMinValue(startDate.getTime());
-        rangeSeekBar.setSelectedMaxValue(endDate.getTime());
+        rangeSeekBar.setSelectedMinValue(selectedStartDate.getTime());
+        rangeSeekBar.setSelectedMaxValue(selectedEndDate.getTime());
 
         timeTextView = (TextView)parentView.findViewById(R.id.timeTextView);
 
@@ -203,33 +208,32 @@ public class BookRoomListFragment extends RoomListFragment {
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Long>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
-                adjustMaxValueFor(minValue, maxValue);
+                adjustMinMaxValueFor(minValue, maxValue);
                 updateTimeIntervalWithStartTime(minValue, maxValue);
                 updateTimeTextView();
             }
         });
 
-
         return parentView;
     }
 
-    private void adjustMaxValueFor(Long minValue, Long maxValue) {
+    private void adjustMinMaxValueFor(Long minValue, Long maxValue) {
         Long delta = minValue - previousMinValue;
+        previousMinValue = minValue;
 
         if (delta != 0) {
             rangeSeekBar.setSelectedMaxValue(maxValue + delta);
         }
-
-        previousMinValue = minValue;
     }
 
     private void updateTimeIntervalWithStartTime(Long startTime, Long endTime) {
-        startDate = new Date(startTime);
-        startDate = CalendarUtils.trimSeconds(startDate);
-        endDate = new Date(endTime);
+        selectedStartDate = new Date(startTime);
+        selectedStartDate = CalendarUtils.trimSeconds(selectedStartDate);
+        selectedEndDate = new Date(endTime);
+        selectedEndDate = CalendarUtils.trimSeconds(selectedEndDate);
 
         if (aRooms != null) {
-            aRooms.setTimePeriod(startDate, endDate);
+            aRooms.setTimePeriod(selectedStartDate, selectedEndDate);
         }
     }
 
@@ -240,9 +244,9 @@ public class BookRoomListFragment extends RoomListFragment {
     }
 
     private void updateTimeTextView() {
-        String dateRangeText = DateFormat.getTimeInstance(DateFormat.SHORT).format(startDate);
+        String dateRangeText = DateFormat.getTimeInstance(DateFormat.SHORT).format(selectedStartDate);
         dateRangeText += " - ";
-        dateRangeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(endDate);
+        dateRangeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(selectedEndDate);
 
         timeTextView.setText(dateRangeText);
     }

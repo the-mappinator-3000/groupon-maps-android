@@ -5,12 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.themappinator.grouponcalandar.activities.BookEventActivity">
 
-    <EditText
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/booking_summary"
-        android:id="@+id/etSummary"
+        android:id="@+id/tvSummary"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -23,6 +22,19 @@
         android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:hint="@string/booking_summary"
+        android:id="@+id/etSummary"
+        android:layout_below="@id/tvSummary"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/etDetails"
@@ -33,6 +45,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_book"
@@ -43,6 +56,7 @@
         />
 
     <Button
+        style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_cancel"

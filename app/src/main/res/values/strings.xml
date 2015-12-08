@@ -4,7 +4,7 @@
     <string name="event_details">Details</string>
     <string name="btn_book">Book</string>
     <string name="btn_cancel">Cancel</string>
-    <string name="room_booking_title">Booking %s</string>
+    <string name="room_booking_title">Booking %1$s from %2$s to %3$s</string>
     <string name="room_list_activity_title"><![CDATA[Groupon Rooms & Maps]]></string>
     <string name="time_text_view_hint">3:00 PM - 3:45 PM</string>
 </resources>

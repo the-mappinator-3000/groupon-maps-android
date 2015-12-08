@@ -44,31 +44,33 @@ public class BrowseRoomListFragment extends RoomListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String[] floors = getResources().getStringArray(R.array.floors);
-        for (String floor : floors) {
-            int resourceId = getResources().getIdentifier(floor + EXTRA_SUFFIX, "array", getActivity().getApplicationInfo().packageName);
-            if (resourceId > 0) {
-                String[] roomIds = getResources().getStringArray(resourceId);
-                for (String roomId : roomIds) {
-                    String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
-                    String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
-                    Room room = new Room();
-                    room.floor = floor;
-                    room.roomid = roomId;
-                    room.name = name;
-                    room.googleResourceId = googleResource;
-                    rooms.add(room);
+        if (savedInstanceState == null) {
+            String[] floors = getResources().getStringArray(R.array.floors);
+            for (String floor : floors) {
+                int resourceId = getResources().getIdentifier(floor + EXTRA_SUFFIX, "array", getActivity().getApplicationInfo().packageName);
+                if (resourceId > 0) {
+                    String[] roomIds = getResources().getStringArray(resourceId);
+                    for (String roomId : roomIds) {
+                        String googleResource = CalendarUtils.getResourceString(roomId, getActivity());
+                        String name = CalendarUtils.getResourceString(roomId + PRETTY_SUFFIX, getActivity());
+                        Room room = new Room();
+                        room.floor = floor;
+                        room.roomid = roomId;
+                        room.name = name;
+                        room.googleResourceId = googleResource;
+                        rooms.add(room);
+                    }
                 }
             }
-        }
 
-        // Sort all rooms alphabetically by name
-        Collections.sort(rooms, new Comparator<Room>() {
-            @Override
-            public int compare(Room r1, Room r2) {
-                return r1.name.compareToIgnoreCase(r2.name);
-            }
-        });
+            // Sort all rooms alphabetically by name
+            Collections.sort(rooms, new Comparator<Room>() {
+                @Override
+                public int compare(Room r1, Room r2) {
+                    return r1.name.compareToIgnoreCase(r2.name);
+                }
+            });
+        }
     }
 
     @Override

@@ -23,8 +23,8 @@
     </string-array>
     <string name="pa4_1_running_with_scissors">groupon.com_2d39363835323336302d333035@resource.calendar.google.com</string>
     <string name="pa4_1_irs_audit">groupon.com_33323633363931342d323338@resource.calendar.google.com</string>
-    <string name="pa4_1_lion_tipping">groupon.com_3932313735323337373730@resource.calendar.google.com</string>
-    <string name="pa4_1_zombie_invasion">groupon.com_333435353838322d3136@resource.calendar.google.com</string>
+    <string name="pa4_1_lion_tipping">groupon.com_32333336353438302d3236@resource.calendar.google.com</string>
+    <string name="pa4_1_zombie_invasion">groupon.com_2d37363231303433383233@resource.calendar.google.com</string>
     <string name="pa4_1_nuclear_winter">groupon.com_2d33333437353638362d383133@resource.calendar.google.com</string>
     <string name="pa4_1_spontaneous_human_combustion_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
     <string name="pa4_1_groupon_user_reseach_lab_CANT_RESERVE">groupon.com_XXX@resource.calendar.google.com</string>
@@ -47,9 +47,9 @@
         <item>pa4_2_shapes_and_colors</item>
         <item>pa4_2_dealpig</item>
     </string-array>
-    <string name="pa4_2_coupon_detat">groupon.com_37363532393933332d3337@resource.calendar.google.com</string>
-    <string name="pa4_2_shapes_and_colors">groupon.com_323830373232372d3932@resource.calendar.google.com</string>
-    <string name="pa4_2_dealpig">groupon.com_3333313631303338393532@resource.calendar.google.com</string>
+    <string name="pa4_2_coupon_detat">groupon.com_37373737383438323131@resource.calendar.google.com</string>
+    <string name="pa4_2_shapes_and_colors">groupon.com_3539323838363233313136@resource.calendar.google.com</string>
+    <string name="pa4_2_dealpig">groupon.com_3531303533343835353031@resource.calendar.google.com</string>
 
     <string name="pa4_2_coupon_detat_pretty">Coupon d\'Etat</string>
     <string name="pa4_2_shapes_and_colors_pretty">Shapes and Colors</string>
@@ -119,12 +119,12 @@
     <string name="pa5_1_do_not_reply_all">groupon.com_2d3932343837393238313735@resource.calendar.google.com</string>
     <string name="pa5_1_no_loitering">groupon.com_37363531323931323532@resource.calendar.google.com</string>
     <string name="pa5_1_15_items_or_less">groupon.com_2d33383133363032352d323835@resource.calendar.google.com</string>
-    <string name="pa5_1_no_flash_photography">groupon.com_2d3431353338363131333738@resource.calendar.google.com</string>
+    <string name="pa5_1_no_flash_photography">groupon.com_2d313033373138363836@resource.calendar.google.com</string>
     <string name="pa5_1_you_break_you_buy">groupon.com_2d3537353937313533323330@resource.calendar.google.com</string>
     <string name="pa5_1_no_groupon_parking">groupon.com_2d3530323735353839383633@resource.calendar.google.com</string>
-    <string name="pa5_1_pieces_of_flair">groupon.com_35303137343835323531@resource.calendar.google.com</string>
+    <string name="pa5_1_pieces_of_flair">groupon.com_35303136323834362d383034@resource.calendar.google.com</string>
     <string name="pa5_1_miltons_stapler">groupon.com_363036343934362d333631@resource.calendar.google.com</string>
-    <string name="pa5_1_jump_to_conclusions">groupon.com_2d3938333130323730323133@resource.calendar.google.com</string>
+    <string name="pa5_1_jump_to_conclusions">groupon.com_2d36373133313136322d3534@resource.calendar.google.com</string>
     <string name="pa5_1_the_other_michael_bolton">groupon.com_2d39353138303134352d323239@resource.calendar.google.com</string>
 
     <string name="pa5_1_mr_petersons_office_pretty">Mr. Peterson\'s Office</string>

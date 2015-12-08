@@ -80,7 +80,7 @@ public class BookEventDialog extends DialogFragment {
 
         getDialog().setTitle(selectedRoom.name);
 
-        String summary = getResources().getString(R.string.room_booking_title, selectedRoom.name, sdf.format(startDate), sdf.format(endDate));
+        String summary = getResources().getString(R.string.room_booking_title, sdf.format(startDate), sdf.format(endDate));
         tvSummary.setText(summary);
         setupButtons();
         setupEditText();

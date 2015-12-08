@@ -24,7 +24,6 @@ import java.util.HashMap;
  */
 public class MapImageView extends ImageView {
 
-    private static final int SELECTED_COLOR = MainUITraits.MAIN_THEME_COLOR;
     private static final HashMap<String, Integer> floorToResourceIdMap = new HashMap<>();
 
     private ArrayList<Room> selectedRooms = new ArrayList<>();
@@ -114,7 +113,7 @@ public class MapImageView extends ImageView {
             path.transform(ctmMatrix);
 
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(SELECTED_COLOR);
+            paint.setColor(getResources().getColor(R.color.colorPrimary));
             canvas.drawPath(path, paint);
         }
     }

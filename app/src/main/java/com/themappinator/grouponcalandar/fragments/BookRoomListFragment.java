@@ -44,6 +44,7 @@ public class BookRoomListFragment extends RoomListFragment {
     private static final String SELECTED_END_DATE = "selectedEndDate";
     private static final String START_DATE = "startDate";
     private static final String END_DATE = "endDate";
+    private static final int SEEK_BAR_SCALE = 10000; // Trying to solve sensitivity issues here
 
     enum RefreshMode {
         None,
@@ -193,11 +194,11 @@ public class BookRoomListFragment extends RoomListFragment {
         // Setup the new range seek bar
         rangeSeekBar = (RangeSeekBar<Long>)parentView.findViewById(R.id.timeSeekBar);
         // Set the range
-        rangeSeekBar.setRangeValues(startDate.getTime(), endDate.getTime());
+        rangeSeekBar.setRangeValues(startDate.getTime() / SEEK_BAR_SCALE, endDate.getTime() / SEEK_BAR_SCALE);
         rangeSeekBar.setNotifyWhileDragging(true);
 
-        rangeSeekBar.setSelectedMinValue(selectedStartDate.getTime());
-        rangeSeekBar.setSelectedMaxValue(selectedEndDate.getTime());
+        rangeSeekBar.setSelectedMinValue(selectedStartDate.getTime() / SEEK_BAR_SCALE);
+        rangeSeekBar.setSelectedMaxValue(selectedEndDate.getTime() / SEEK_BAR_SCALE);
 
         timeTextView = (TextView)parentView.findViewById(R.id.timeTextView);
 
@@ -209,7 +210,7 @@ public class BookRoomListFragment extends RoomListFragment {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
                 adjustMinMaxValueFor(minValue, maxValue);
-                updateTimeIntervalWithStartTime(minValue, maxValue);
+                updateTimeIntervalWithStartTime(minValue * SEEK_BAR_SCALE, maxValue * SEEK_BAR_SCALE);
                 updateTimeTextView();
             }
         });

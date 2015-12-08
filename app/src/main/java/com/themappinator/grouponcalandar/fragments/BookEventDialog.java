@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.themappinator.grouponcalandar.R;
@@ -20,6 +21,7 @@ import com.themappinator.grouponcalandar.activities.MapActivity;
 import com.themappinator.grouponcalandar.model.Room;
 import com.themappinator.grouponcalandar.network.GoogleCalendarApiClient;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -30,6 +32,7 @@ import butterknife.ButterKnife;
  */
 public class BookEventDialog extends DialogFragment {
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
     private static final String START_DATE = "startDate";
     private static final String END_DATE = "endDate";
 
@@ -42,6 +45,7 @@ public class BookEventDialog extends DialogFragment {
     private String detailsText;
     @Bind(R.id.btnBook) Button btnBook;
     @Bind(R.id.btnCancel) Button btnCancel;
+    @Bind(R.id.tvSummary) TextView tvSummary;
 
     private Date startDate;
     private Date endDate;
@@ -74,7 +78,10 @@ public class BookEventDialog extends DialogFragment {
         client = GoogleCalendarApiClient.getInstance();
         mProgress = new ProgressDialog(getContext());
 
-        getDialog().setTitle(getResources().getString(R.string.room_booking_title, selectedRoom.name));
+        getDialog().setTitle(selectedRoom.name);
+
+        String summary = getResources().getString(R.string.room_booking_title, sdf.format(startDate), sdf.format(endDate));
+        tvSummary.setText(summary);
         setupButtons();
         setupEditText();
         return view;
